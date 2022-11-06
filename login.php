@@ -4,29 +4,27 @@ require('koneksi.php');
 session_start();
 
 if(isset($_POST['submit'])){
-    $email = $_POST['txt_email'];
+    $username = $_POST['txt_username'];
     $pass = $_POST['txt_pass'];
 
 
-    if(!empty(trim($email)) && !empty($pass)){
+    if(!empty(trim($username)) && !empty($pass)){
 
-        $query = "SELECT * FROM user_detail WHERE user_email = '$email'";
+        $query = "SELECT * FROM admin WHERE username = '$username'";
         $result = mysqli_query($koneksi, $query);
         $num = mysqli_num_rows($result);
 
         while($row = mysqli_fetch_array($result)){
-            $id = $row['id'];
-            $userVal = $row['user_email'];
-            $passVal = $row['user_password'];
-            $userName = $row['user_fullname'];
-            $level = $row['level'];
+            $userName = $row['username'];
+			$passVal = $row['password'];
+            $userVal = $row['nama_admin'];
+            // $level = $row['level'];
         }
 
         if($num != 0){
-            if($userVal == $email && $passVal == $pass){
-                $_SESSION['id'] = $id;
-				$_SESSION['name'] = $userName;
-				$_SESSION['level'] = $level;
+            if($userName == $username && $passVal == $pass){
+				$_SESSION['username'] = $userName;
+				$_SESSION['nama_admin'] = $userVal;
 				header('Location: index.php');
             }else{
                 $error = 'user atau password salah';
@@ -66,7 +64,7 @@ if(isset($_POST['submit'])){
 							<form method="POST" class="my-login-validation" novalidate="" action="login.php">
 								<div class="form-group">
 									<label for="email">Username</label>
-									<input id="email" type="email" class="form-control" name="txt_email" value="" required autofocus>
+									<input id="email" type="email" class="form-control" name="txt_username" value="" required autofocus>
 									<div class="invalid-feedback">
 										Email is invalid
 									</div>

@@ -2,7 +2,7 @@
 $server = "localhost";
 $username = "root";
 $password = "";
-$db = "user";
+$db = "db_sma_darus_sholah";
 $koneksi = mysqli_connect($server, $username, $password, $db);
 
 

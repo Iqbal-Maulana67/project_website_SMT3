@@ -1,10 +1,85 @@
 <?php
+require('koneksi.php');
+
 session_start();
 
 
+if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
+    header('Location: login.php');
+}
 
+if(isset($_POST['submit_insert'])){
+    insertDataSiswa();
+}
 
+// Menampilkan jumlah siswa untuk card body
+function tampilSiswa($siswaArgs){
+    $koneksi = mysqli_connect('localhost','root','','db_sma_darus_sholah');
+    if($siswaArgs == 'all'){
+        $jumlahSiswa = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_aktif";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahSiswa = $row["COUNT('NISN')"];
+        return $jumlahSiswa;
+    }else if($siswaArgs == 'X'){
+        $jumlahSiswa = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'X'";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahSiswa = $row["COUNT('NISN')"];
+        return $jumlahSiswa;
+    }else if($siswaArgs == 'XI'){
+        $jumlahSiswa = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XI'";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahSiswa = $row["COUNT('NISN')"];
+        return $jumlahSiswa;
+    }else if($siswaArgs == 'XII'){
+        $jumlahSiswa = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XII'";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahSiswa = $row["COUNT('NISN')"];
+        return $jumlahSiswa;
+    }
+}
 
+function insertDataSiswa(){
+    $koneksi = mysqli_connect('localhost','root','','db_sma_darus_sholah');
+
+    $nisn = $_POST['nisn'];
+    $nama = $_POST['nama_siswa'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $kelas = $_POST['kelas'];
+    $golongan = $_POST['golongan'];
+    $jurusan = fetchCariJurusan($_POST['jurusan']);
+    $nama_ortu = $_POST['nama_ortu'];
+    $alamat = $_POST['alamat'];
+
+    $sql = mysqli_query($koneksi, 
+    "INSERT INTO siswa_aktif  (nisn, nama_siswa, jenis_kelamin, alamat, nama_ortu, kelas, id_jurusan, golongan)
+    VALUES ('$nisn', '$nama', '$jenis_kelamin', '$alamat', '$nama_ortu','$kelas','".$jurusan['id_jurusan']."','$golongan')");
+}
+
+function fetchDataJurusan(){
+    $koneksi = mysqli_connect('localhost','root','','db_sma_darus_sholah');
+    $query = "SELECT * FROM jurusan";
+    $result = mysqli_query($koneksi, $query);
+    while($row = mysqli_fetch_array($result)){
+        echo '<option value="'.$row['nama_jurusan'].'">'.$row['nama_jurusan'].'</option>';
+    }
+}
+
+function fetchCariJurusan($nama_jurusan){
+    $koneksi = mysqli_connect('localhost','root','','db_sma_darus_sholah');
+    $query = "SELECT * FROM jurusan WHERE nama_jurusan = '$nama_jurusan'";
+    $result = mysqli_query($koneksi, $query);
+    $row = mysqli_fetch_array($result);
+
+    return $row;
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,9 +120,9 @@ session_start();
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                    
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">SMA Darus Sholah</div>
             </a>
 
             <!-- Divider -->
@@ -77,7 +152,6 @@ session_start();
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="">Tabel Siswa</a>
                         <a class="collapse-item" href="">Tabel Alumni</a>
-                        <a class="collapse-item" href="">Tabel Admin</a>
                     </div>
                 </div>
             </li>
@@ -92,10 +166,11 @@ session_start();
                 <a class ="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages"
                 aria-expanded="true" aria-controls="collapseTables">
                     <i class = "fas fa-fw fa-table"></i>
-                    <span>Admin Pages</span>
+                    <span>Halaman Owner</span>
                 </a>
                 <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="">Tabel Admin</a>
                         <a class="collapse-item" href="">History Perubahan</a>
                     </div>
                 </div>
@@ -125,7 +200,7 @@ session_start();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">(ADMIN)</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$_SESSION['nama_admin']?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -165,7 +240,7 @@ session_start();
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Total Siswa Aktif</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?=tampilSiswa('all')?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -182,9 +257,9 @@ session_start();
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Total Siswa Kelas X</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?=tampilSiswa('X')?></div>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-auto">      
                                     <i class="fas fa-user fa-2x text-gray-300"></i>
                                 </div>
                             </div>
@@ -199,7 +274,7 @@ session_start();
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Total Siswa Kelas XI</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?=tampilSiswa('XI')?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -216,7 +291,7 @@ session_start();
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Total Siswa Kelas XII</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?=tampilSiswa('XII')?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -230,7 +305,7 @@ session_start();
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Tabel Siswa Aktif</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Tabel Siswa Aktif</h6>
                         </div>
                         <div class="card-body">
                             <button class="btn btn-success mb-3 text-end" data-toggle="modal" data-target="#exampleModalLong">Tambah data</button>
@@ -238,48 +313,73 @@ session_start();
                               <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">(NAMA TITLE)</h5>
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Siswa</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                    <form>
+                                    <form action="table_siswa.php" method="POST">
                                         <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">NISN</label>
-                                            <input type="text" class="form-control" id="">
+                                            <input type="text" class="form-control" id="nisn" name="nisn">
                                         </div>
                                         <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Nama</label>
-                                            <input type="text" class="form-control" id="">
+                                            <label for="recipient-name" class="col-form-label">Nama Siswa</label>
+                                            <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
                                         </div>
                                         <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Kelamin</label>
-                                            <select class="custom-select">
+                                            <label for="recipient-name" class="col-form-label">Jenis Kelamin</label>
+                                            <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
                                                 <option selected>Jenis Kelamin</option>
-                                                <option value="1">Laki-laki</option>
-                                                <option value="2">Perempuan</option>                    
+                                                <option value="L">Laki-laki</option>
+                                                <option value="P">Perempuan</option>                    
                                             </select>
                                         </div>
-                                         
-                                        <label for="recipient-name" class="col-form-label">Kelas</label>
-                                            <input type="text" class="form-control" id="">
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Kelas</label>
+                                            <select class="custom-select" id="kelas" name="kelas">
+                                                <option selected>Kelas</option>
+                                                <option value="X">X</option>
+                                                <option value="XI">XI</option>
+                                                <option value="XII">XII</option>                    
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Golongan</label>
+                                            <select class="custom-select" id="golongan" name="golongan">
+                                                <option selected>Golongan</option>
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>                    
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Jurusan</label>
+                                            <select class="custom-select" id="jurusan" name="jurusan">
+                                                <option selected>Jurusan</option>
+                                                <?php
+                                                    fetchDataJurusan();
+                                                ?>
+                                            </select>
+                                        </div>
                                         <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">Nama Orang Tua</label>
-                                            <input type="text" class="form-control" id="">
+                                            <input type="text" class="form-control" id="nama_ortu" name="nama_ortu">
                                         </div>
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Alamat</label>
-                                            <textarea class="form-control" id=""></textarea>
+                                            <textarea class="form-control" id="alamat" name="alamat"></textarea>
                                         </div> 
                                         <div class="form-group">
                                         </div>
-                                    </form>
+                                    
                                   </div>
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-success" name="submit_insert">Masukkan Data</button>
                                   </div>
+                                  </form>
                                 </div>
                               </div>
                             </div>
@@ -289,30 +389,41 @@ session_start();
                                         <tr>
                                             <th>NISN</th>
                                             <th>Nama</th>
-                                            <th>Alamat</th>
                                             <th>Jenis Kelamin</th>
-                                            <th>Kuliah/Kerja</th>
-                                            <th>Nama Instansi</th>
-                                            <th>Tahun Lulusan</th>
-                                            <th>Nomor HP/Whatsapp</th>
+                                            <th>Kelas</th>
+                                            <th>Golongan</th>
+                                            <th>Jurusan</th>
+                                            <th>Nama Orang Tua</th>
+                                            <th>Alamat</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>0000833823821</td>
-                                            <td>Iqbal Maulana</td>
-                                            <td>Paiton</td>
-                                            <td>L</td>
-                                            <td>Kuliah</td>
-                                            <td>Politeknik Negeri Jember</td>
-                                            <td>2021</td>
-                                            <td>083833848095</td>
-                                            <td>
-                                                <button class="btn btn-success" onclick="takeData()" type="button">Edit</button>
-                                                <a href="" class="btn btn-danger">Hapus</a>
-                                            </td>
-                                        </tr>
+                                        
+                                        <?php
+                                            $query = "SELECT * FROM siswa_aktif JOIN jurusan ON siswa_aktif.id_jurusan = jurusan.id_jurusan";
+                                            $result = mysqli_query($koneksi, $query);
+                                            $numrows = mysqli_num_rows($result);
+
+                                            while($row = mysqli_fetch_array($result)){
+                                                echo '
+                                                <tr>
+                                                    <td>'.$row['nisn'].'</td>
+                                                    <td>'.$row['nama_siswa'].'</td>
+                                                    <td>'.$row['jenis_kelamin'].'</td>
+                                                    <td>'.$row['kelas'].'</td>
+                                                    <td>'.$row['golongan'].'</td>
+                                                    <td>'.$row['nama_jurusan'].'</td>
+                                                    <td>'.$row['nama_ortu'].'</td>
+                                                    <td>'.$row['alamat'].'</td>
+                                                    <td>
+                                                        <button class="btn btn-success fas fa-edit" onclick="takeData()" type="button"></button>
+                                                        <a href="" class="btn btn-danger fas fa-trash-alt"></a>
+                                                    </td>
+                                                </tr>
+                                                ';
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -373,8 +484,31 @@ session_start();
     <!-- Page level custom scripts -->
     <!-- <script src="js/demo/datatables-demo.js"></script> -->
     <script>
-        $('#dataTable').DataTable({
-
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                // initComplete: function () {
+                //     this.api()
+                //         .columns()
+                //         .every(function () {
+                //             var column = this;
+                //             var select = $('<select><option value=""></option></select>')
+                //                 .appendTo($(column.footer()).empty())
+                //                 .on('change', function () {
+                //                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                
+                //                     column.search(val ? '^' + val + '$' : '', true, false).draw();
+                //                 });
+                            
+                //             column
+                //                 .data()
+                //                 .unique()
+                //                 .sort()
+                //                 .each(function (d, j) {
+                //                     select.append('<option value="' + d + '">' + d + '</option>');
+                //                 });
+                //         });
+                // },
+            });
         });
     </script>
 
