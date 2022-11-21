@@ -1,0 +1,12 @@
+{
+    "name": "vendor/composerpackage",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Composerpackage\\": "src/"
+        }
+    },
+    "require": {
+        "ext-fileinfo": "*",
+        "phpoffice/phpspreadsheet": "^1.25"
+    }
+}

@@ -142,7 +142,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-2 text-gray-800">Data Siswa Alumni</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Data Admin</h1>
                     <div class="row">
                         <!-- Card 1 -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -151,7 +151,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Alumni</div>
+                                                Total Admin</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
                                         </div>
                                         <div class="col-auto">
@@ -161,55 +161,16 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Card 2 -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Alumni Kuliah</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Alumni Kerja</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
                     <!-- DataTable -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Data Siswa Alumni</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Data Admin</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
-                                <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#importExcel">Import Data</button>
-                                <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#exportExcel">Export Data</button>
                             </div>
 
                             <!-- Import Data Modal -->
@@ -243,7 +204,7 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Siswa</h5>
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Admin</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -251,44 +212,16 @@
                                         <div class="modal-body">
                                             <form action="table_siswa.php" method="POST">
                                                 <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">NISN</label>
-                                                    <input type="text" class="form-control" id="nisn" name="nisn">
+                                                    <label for="recipient-name" class="col-form-label">Username</label>
+                                                    <input type="text" class="form-control" id="username" name="username">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Siswa Alumni</label>
+                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Password</label>
                                                     <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Jenis Kelamin</label>
-                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
-                                                        <option selected>Jenis Kelamin</option>
-                                                        <option value="L">Laki-laki</option>
-                                                        <option value="P">Perempuan</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nomer HP</label>
-                                                    <input type="text" class="form-control" id="no_hp" name="no_hp">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="message-text" class="col-form-label">Alamat</label>
-                                                    <textarea class="form-control" id="alamat" name="alamat"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Tahun Lulusan</label>
-                                                    <input type="text" class="form-control" id="tahun_lulusan" name="tahun_lulusan">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
-                                                        <option selected>Status Alumni</option>
-                                                        <option value="L">Kerja</option>
-                                                        <option value="P">Kuliah</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Instansi</label>
-                                                    <input type="text" class="form-control" id="nama_instansi" name="nama_instansi">
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
@@ -305,14 +238,8 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>NISN</th>
+                                            <th>Username</th>
                                             <th>Nama</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Nomer HP</th>
-                                            <th>Alamat</th>
-                                            <th>Tahun Lulusan</th>
-                                            <th>Status Alumni</th>
-                                            <th>Nama Instansi</th>
                                             <th>Password</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -322,15 +249,9 @@
                                             <td>Awoo</td>
                                             <td>Awoo</td>
                                             <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
                                             <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" style="width: 50%;"></button>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" style="width: 50%;"></button>
+                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" ></button>
+                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
                                             </td>
                                         </tr>
                                     </tbody>

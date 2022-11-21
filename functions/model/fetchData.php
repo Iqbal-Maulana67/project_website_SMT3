@@ -18,25 +18,28 @@ $primaryKey = 'nisn';
 // The `dt` parameter represents the DataTables column identifier. 
 $columns = array( 
     array( 'db' => 'nisn', 'dt' => 0 ), 
-    array( 'db' => 'nama',  'dt' => 1 ), 
+    array( 'db' => 'nama_siswa',  'dt' => 1 ), 
     array( 'db' => 'jenis_kelamin',      'dt' => 2 ), 
     array( 'db' => 'kelas',     'dt' => 3 ), 
     array( 'db' => 'nama_ortu',    'dt' => 4 ), 
     array( 'db' => 'alamat',    'dt' => 5 ), 
+    array( 'db' => 'id_jurusan', 'dt' => 6),
+    array( 'db' => 'golongan', 'dt' => 7),
 ); 
  
 $searchFilter = array(); 
-if(!empty($_GET['search_keywords'])){ 
-    $searchFilter['search'] = array( 
-        'first_name' => $_GET['search_keywords'], 
-        'last_name' => $_GET['search_keywords'], 
-        'email' => $_GET['search_keywords'], 
-        'country' => $_GET['search_keywords'] 
-    ); 
-} 
+// if(!empty($_GET['search_keywords'])){ 
+//     $searchFilter['search'] = array( 
+//         'first_name' => $_GET['search_keywords'], 
+//         'last_name' => $_GET['search_keywords'], 
+//         'email' => $_GET['search_keywords'], 
+//         'country' => $_GET['search_keywords'] 
+//     ); 
+// }
+
 if(!empty($_GET['filter_option'])){ 
     $searchFilter['filter'] = array( 
-        'kelas' => $_GET['filter_option'] 
+        'jenis_kelamin' => $_GET['filter_option']
     ); 
 } 
  
@@ -45,5 +48,5 @@ require 'ssp.class.php';
  
 // Output data as json format 
 echo json_encode( 
-    SSP::simple( $_GET, $dbDetails, $table, $primaryKey, $columns, $searchFilter) 
+    SSP::simple($_GET, $dbDetails, $table, $primaryKey, $columns, $searchFilter) 
 );
