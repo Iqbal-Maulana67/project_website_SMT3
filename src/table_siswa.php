@@ -1,5 +1,5 @@
 <?php
-require('koneksi.php');
+require('config/koneksi.php');
 
 session_start();
 
@@ -201,6 +201,20 @@ function IfOptionSelected($data, $selectedData)
             <div class="sidebar-heading">
                 Data Sekolah
             </div>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="#">    
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Daftar Antrian</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-newspaper"></i>
+                    <span>Berita</span>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTables" aria-expanded="true" aria-controls="collapseTables">
@@ -214,16 +228,15 @@ function IfOptionSelected($data, $selectedData)
                     </div>
                 </div>
             </li>
-
             <hr class="sidebar-divider">
 
             <div class="sidebar-heading">
-                Admin
+                Owner
             </div>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-crown"></i>
                     <span>Halaman Owner</span>
                 </a>
                 <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -358,29 +371,6 @@ function IfOptionSelected($data, $selectedData)
                             <div class="row">
                                 <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
                                 <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#importExcel">Import Data</button>
-                                <!-- Dropdown Filter -->
-                                <!-- <div class="dropdown no-arrow">
-                                    <button class="btn btn-success mb-3 text-end m-1" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Filter
-                                        <i class="fas fa-filter fa-sm"></i>
-                                    </button>
-                                    Dropdown - Filter Information
-                                    <div class="dropdown-menu dropdown-menu-down shadow animated--grow-in" aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Profile
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Logout
-                                        </a>
-                                    </div>
-                                </div> -->
                             </div>
 
                             <!-- Import Data Modal -->
