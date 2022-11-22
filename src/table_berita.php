@@ -64,7 +64,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="table_berita.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Berita</span>
                 </a>
@@ -95,7 +95,7 @@
                 </a>
                 <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Tabel Admin</a>
+                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
                         <a class="collapse-item" href="history_page.php">History Perubahan</a>
                     </div>
                 </div>

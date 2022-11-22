@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>Pendasial</title>
 
     <!-- Custom fonts for this template -->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -95,7 +95,7 @@
                 </a>
                 <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Tabel Admin</a>
+                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
                         <a class="collapse-item" href="history_page.php">History Perubahan</a>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -153,7 +153,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-2 text-gray-800">Data Admin</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Antrian Validasi Status Alumni</h1>
                     <div class="row">
                         <!-- Card 1 -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -162,11 +162,11 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Admin</div>
+                                                Total Antrian</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            <i class="fas fa-person-booth fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -177,37 +177,11 @@
                     <!-- DataTable -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Data Admin</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Antrian Validasi Status Alumni
+                            </h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
-                            </div>
-
-                            <!-- Import Data Modal -->
-                            <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-
-                                    <form method="post" enctype="multipart/form-data" action="import_data.php">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="">Import Data</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Silahkan masukkan excel di bawah</p>
-                                                <div class="row">
-                                                    <div class="col-xl-12">
-                                                        <input name="filepegawai" type="file" required="required">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success">Import Data</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
 
                             <!-- Insert modal -->

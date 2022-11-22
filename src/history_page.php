@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>Pendasial</title>
 
     <!-- Custom fonts for this template -->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -95,8 +95,8 @@
                 </a>
                 <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Tabel Admin</a>
-                        <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
+                        <a class="collapse-item" href="#">History Perubahan</a>
                     </div>
                 </div>
             </li>
@@ -153,96 +153,18 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-2 text-gray-800">Data Admin</h1>
-                    <div class="row">
-                        <!-- Card 1 -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Admin</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h1 class="h3 mb-2 text-gray-800">History Perubahan</h1>
 
                     <!-- DataTable -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Data Admin</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Data History Perubahan</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
-                            </div>
-
-                            <!-- Import Data Modal -->
-                            <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-
-                                    <form method="post" enctype="multipart/form-data" action="import_data.php">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="">Import Data</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Silahkan masukkan excel di bawah</p>
-                                                <div class="row">
-                                                    <div class="col-xl-12">
-                                                        <input name="filepegawai" type="file" required="required">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success">Import Data</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
 
                             <!-- Insert modal -->
-                            <div class="modal fade" id="insertDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Admin</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="table_siswa.php" method="POST">
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Username</label>
-                                                    <input type="text" class="form-control" id="username" name="username">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Password</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
-                                                </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success" name="submit_insert">Masukkan Data</button>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- Table Data -->
                             <div class="table-responsive">
@@ -250,9 +172,10 @@
                                     <thead>
                                         <tr>
                                             <th>Username</th>
-                                            <th>Nama</th>
-                                            <th>Password</th>
+                                            <th>Waktu</th>
                                             <th>Aksi</th>
+                                            <th>Deskripsi</th>
+                                            <th>View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -260,9 +183,9 @@
                                             <td>Awoo</td>
                                             <td>Awoo</td>
                                             <td>Awoo</td>
+                                            <td>Awoo</td>
                                             <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" ></button>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
+                                                <button class="btn btn-warning fas fa-eye" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" ></button>
                                             </td>
                                         </tr>
                                     </tbody>
