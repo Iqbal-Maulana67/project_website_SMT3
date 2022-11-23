@@ -17,12 +17,12 @@
 
     <!-- Custom styles for this template -->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-
+    <link href="../css/mylogin.css" rel="stylesheet">
+    
     <!-- Custom styles for this page -->
     <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
-
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -125,7 +125,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -153,7 +153,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-2 text-gray-800">Data Admin</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Data Berita</h1>
                     <div class="row">
                         <!-- Card 1 -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -162,11 +162,29 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Admin</div>
+                                                Total Berita</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            <i class="fas fa-newspaper fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Berita Rekomendasi</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-newspaper fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -177,68 +195,61 @@
                     <!-- DataTable -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Data Admin</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Data Berita</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
-                            </div>
-
-                            <!-- Import Data Modal -->
-                            <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-
-                                    <form method="post" enctype="multipart/form-data" action="import_data.php">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="">Import Data</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Silahkan masukkan excel di bawah</p>
-                                                <div class="row">
-                                                    <div class="col-xl-12">
-                                                        <input name="filepegawai" type="file" required="required">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success">Import Data</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                <a href="detail_berita_page.php">
+                                    <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
+                                </a>
                             </div>
 
                             <!-- Insert modal -->
                             <div class="modal fade" id="insertDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Admin</h5>
+                                            <h5 class="modal-title" id="exampleModalLongTitle">View Berita</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="table_siswa.php" method="POST">
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Username</label>
-                                                    <input type="text" class="form-control" id="username" name="username">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Password</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
-                                                </div>
+                                            <h1 class="h4 mb-2 text-gray-800">
+                                            (TITLE)
+                                            </h1>
+                                            <hr>
+                                            <img src="../img/login-background.jpg" alt="" class="berita-img-view">
+                                            <p class="berita-description">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Congue mauris rhoncus aenean vel. Dui id ornare arcu odio. Vulputate mi sit amet mauris commodo quis. At auctor urna nunc id cursus metus aliquam eleifend. Vel facilisis volutpat est velit egestas dui id ornare arcu. Cursus eget nunc scelerisque viverra mauris in aliquam. A pellentesque sit amet porttitor eget dolor morbi non. Nunc mi ipsum faucibus vitae aliquet nec. Scelerisque eleifend donec pretium vulputate sapien. Mauris rhoncus aenean vel elit scelerisque.
+
+                                            Vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Purus semper eget duis at tellus at urna condimentum. Feugiat in fermentum posuere urna nec tincidunt. Ac turpis egestas integer eget. Facilisis magna etiam tempor orci eu lobortis elementum nibh. Tortor dignissim convallis aenean et tortor at. Justo eget magna fermentum iaculis eu non. Sed cras ornare arcu dui. Et tortor at risus viverra adipiscing at in tellus integer. Tortor aliquam nulla facilisi cras fermentum odio eu.
+                                            
+                                            Orci nulla pellentesque dignissim enim sit amet venenatis urna. Odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Fringilla ut morbi tincidunt augue interdum velit euismod in. Ut sem viverra aliquet eget. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Nullam eget felis eget nunc lobortis mattis aliquam faucibus. Est pellentesque elit ullamcorper dignissim cras tincidunt. Sem viverra aliquet eget sit amet tellus cras adipiscing enim. Felis donec et odio pellentesque diam. Volutpat sed cras ornare arcu dui vivamus arcu felis. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Accumsan sit amet nulla facilisi morbi tempus iaculis. Vestibulum lorem sed risus ultricies tristique nulla aliquet enim. Aliquam vestibulum morbi blandit cursus risus at ultrices.
+
+                                            Varius quam quisque id diam. Commodo nulla facilisi nullam vehicula ipsum a arcu. Turpis massa sed elementum tempus. Vestibulum morbi blandit cursus risus at. Porta lorem mollis aliquam ut porttitor. Egestas sed sed risus pretium quam. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Tellus integer feugiat scelerisque varius morbi enim nunc. Est sit amet facilisis magna. Maecenas pharetra convallis posuere morbi leo.
+
+                                            Sem et tortor consequat id porta nibh venenatis cras. Auctor augue mauris augue neque gravida in fermentum. Egestas egestas fringilla phasellus faucibus scelerisque. Lacus luctus accumsan tortor posuere ac ut. Eu augue ut lectus arcu bibendum. Mollis nunc sed id semper risus in hendrerit gravida rutrum. Egestas maecenas pharetra convallis posuere morbi. Condimentum lacinia quis vel eros. Quis vel eros donec ac odio. Varius vel pharetra vel turpis nunc eget lorem. Eu sem integer vitae justo eget magna fermentum iaculis eu. Sem nulla pharetra diam sit amet nisl suscipit. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Consectetur lorem donec massa sapien faucibus et molestie. Faucibus interdum posuere lorem ipsum dolor sit amet consectetur.
+                                            </p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success" name="submit_insert">Masukkan Data</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hapus Data Modal -->
+                            <div class="modal" id="hapusTableBerita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4" style="border-radius: 20px;">
+                                        <form action="table_siswa.php" method="POST">
+                                            <h3>Konfirmasi</h3>
+                                                <p class="r3 px-md-5 px-sm-1">Apa anda yakin menghapus data ini?.</p>
+                                                <div class="text-center mb-3">
+                                                <button type="button" class="btn btn-secondary col-xl-4 col-md-4 col-sm-4" data-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-danger col-xl-4 col-md-4 col-sm-4" name="submit_hapus" value="' . $row['nisn'] . '">Hapus</button>
+                                                </div>
                                         </form>
                                     </div>
                                 </div>
@@ -249,20 +260,21 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
-                                            <th>Nama</th>
-                                            <th>Password</th>
+                                            <th>id_berita</th>
+                                            <th>Judul</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td>Awoo</td>   
                                             <td>Awoo</td>
                                             <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" ></button>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
+                                            <td style="text-align: center;">    
+                                                <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="" data-toggle="modal" data-target="#insertDataModal"></button>
+                                                <a href="detail_berita_page.php"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>
+                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" data-toggle="modal" data-target="#hapusTableBerita"></button>
                                             </td>
                                         </tr>
                                     </tbody>

@@ -57,6 +57,17 @@ body .my-login-page {
 	text-align: center;
 }
 
+.berita-img-view{
+	display: block;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.berita-description{
+	margin: 10px;
+	text-align: justify;
+}
+
 @media screen and (max-width: 425px) {
 	.my-login-page .card-wrapper {
 		width: 90%;

@@ -271,7 +271,7 @@ function IfOptionSelected($data, $selectedData)
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -520,8 +520,8 @@ function IfOptionSelected($data, $selectedData)
                                                     <td>' . $row['alamat'] . '</td>
                                                     <td>' . $row['status']. '</td>
                                                     <td>
-                                                        <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)"></button>
-                                                        <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
+                                                        <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="editSiswa(`' . $row['nisn'] . '`)"></button>
+                                                        <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" onclick="deleteSiswa(`' . $row['nisn'] . '`)"></button>
                                                     </td>
                                                 </tr>
                                                 
@@ -707,13 +707,14 @@ function IfOptionSelected($data, $selectedData)
             // });
         });
 
-        function edit(nisn) {
-            // var nisn = "";
-            // $("#dataTable tbody").on('click', 'button', function(){
-            // nisn = table.cell('.nisn').data();
+        function editSiswa(nisn) {
             var modalName = "#editTable" + nisn;
             $(modalName).modal();
-            // });
+        }
+
+        function deleteSiswa(nisn){
+            var modalName = "#hapusTable" + nisn;
+            $(modalName).modal();
         }
     </script>
 
