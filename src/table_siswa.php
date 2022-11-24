@@ -67,12 +67,20 @@ function insertDataSiswa()
     $jurusan = fetchCariJurusan($_POST['jurusan']);
     $nama_ortu = $_POST['nama_ortu'];
     $alamat = $_POST['alamat'];
+    $status_siswa = $_POST['status'];
 
-    $sql = mysqli_query(
-        $koneksi,
-        "INSERT INTO siswa_aktif  (nisn, nama_siswa, jenis_kelamin, alamat, nama_ortu, kelas, id_jurusan, golongan)
-    VALUES ('$nisn', '$nama', '$jenis_kelamin', '$alamat', '$nama_ortu','$kelas','" . $jurusan['id_jurusan'] . "','$golongan')"
-    );
+    $query = "INSERT INTO siswa_aktif VALUES(
+        '".$nisn."',
+        '".$nama."',
+        '".$jenis_kelamin."',
+        '".$kelas."',
+        '".$golongan."',
+        '".$jurusan['id_jurusan']."',
+        '".$nama_ortu."',
+        '".$alamat."',
+        '".$status_siswa."')";
+
+    $sql = mysqli_query($koneksi, $query);
 }
 
 function EditDataSiswa()
@@ -87,10 +95,11 @@ function EditDataSiswa()
     $jurusan = fetchCariJurusan($_POST['jurusan']);
     $nama_ortu = $_POST['nama_ortu'];
     $alamat = $_POST['alamat'];
+    $status_siswa = $_POST['status'];
 
     $sql = mysqli_query(
         $koneksi,
-        "UPDATE siswa_aktif SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', kelas= '$kelas', golongan='$golongan', id_jurusan='" . $jurusan['id_jurusan'] . "', nama_ortu='$nama_ortu', alamat='$alamat' WHERE nisn = '$nisn'"
+        "UPDATE siswa_aktif SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', kelas= '$kelas', golongan='$golongan', id_jurusan='" . $jurusan['id_jurusan'] . "', nama_ortu='$nama_ortu', alamat='$alamat', status='$status_siswa' WHERE nisn = '$nisn'"
     );
 }
 
@@ -166,6 +175,9 @@ function IfOptionSelected($data, $selectedData)
 
     <!-- Custom styles for this page -->
     <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <!-- Custom alert -->
+    <link rel="stylesheet" href="../css/custom-alert.css">
 
 </head>
 
@@ -371,13 +383,14 @@ function IfOptionSelected($data, $selectedData)
                             <div class="row">
                                 <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
                                 <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#importExcel">Import Data</button>
+                                <!-- <button class="btn btn-success mb-3 text-end m-1" id="alert-test">Alert-test</button> -->
                             </div>
 
                             <!-- Import Data Modal -->
                             <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
 
-                                    <form method="post" enctype="multipart/form-data" action="import_data.php">
+                                    <form method="POST" enctype="multipart/form-data" action="model/import_siswa_aktif.php">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="">Import Data</h5>
@@ -386,13 +399,13 @@ function IfOptionSelected($data, $selectedData)
                                                 <p>Silahkan masukkan excel di bawah</p>
                                                 <div class="row">
                                                     <div class="col-xl-12">
-                                                        <input name="filepegawai" type="file" required="required">
+                                                        <input name="namafile" type="file" required="required">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success">Import Data</button>
+                                                <button type="submit" class="btn btn-success" name="submit_import">Import Data</button>
                                             </div>
                                         </div>
                                     </form>
@@ -464,7 +477,7 @@ function IfOptionSelected($data, $selectedData)
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                    <select class="custom-select" id="kelas" name="kelas">
+                                                    <select class="custom-select" id="status" name="status">
                                                         <option selected>STATUS</option>
                                                         <option value="TIDAK AKTIF">Tidak Aktif</option>
                                                         <option value="AKTIF">Aktif</option>
@@ -606,7 +619,7 @@ function IfOptionSelected($data, $selectedData)
                                                             </div> 
                                                             <div class="form-group">
                                                                 <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                                <select class="custom-select" id="kelas" name="kelas">
+                                                                <select class="custom-select" id="status" name="status">
                                                                     <option selected>STATUS</option>
                                                                     <option value="TIDAK AKTIF" ' . ((IfOptionSelected("TIDAK AKTIF", $row['status'])) ? 'selected="selected"' : "") . '>Tidak Aktif</option>
                                                                     <option value="AKTIF" ' . ((IfOptionSelected("AKTIF", $row['status'])) ? 'selected="selected"' : "") . '>Aktif</option>
@@ -648,6 +661,24 @@ function IfOptionSelected($data, $selectedData)
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+    
+    <!-- Alert Berhasil  -->
+    <div class="alert show">
+         <span class="fas fa-check-circle"></span>
+         <span class="msg">Warning: This is a warning alert!</span>
+         <div class="close-btn">
+            <span class="fas fa-times"></span>
+         </div>
+    </div>
+
+    <!-- Alert Gagal  -->
+    <div class="alert show">
+         <span class="fas fa-times-circle"></span>
+         <span class="msg">Warning: This is a warning alert!</span>
+         <div class="close-btn">
+            <span class="fas fa-times"></span>
+         </div>
+    </div>
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -691,23 +722,25 @@ function IfOptionSelected($data, $selectedData)
             // Redraw the table
             table.draw();
 
-            // Redraw the table based on the custom input
-            // $('#sortBy').bind("keyup change", function(){
-            //     table.draw();
-            // });
 
-
-            // $("#editButton").click(function (){
-            //     var nisn = "";
-            //     $("#dataTable tbody").on('click', 'button', function(){
-            //         nisn = table.cell('.nisn').data();
-            //         var modalName =  "#editTable" + nisn;
-            //         $(modalName).modal();
-            //     });
-            // });
         });
 
-        function editSiswa(nisn) {
+
+        // $('#alert-test').click(function(){
+        //    $('.alert').addClass("show");
+        //    $('.alert').removeClass("hide");
+        //    $('.alert').addClass("showAlert");
+        //    setTimeout(function(){
+        //     //  $('.alert').removeClass("show");
+        //     //  $('.alert').addClass("hide");
+        //    },5000);
+        //  });
+        //  $('.close-btn').click(function(){
+        //    $('.alert').removeClass("show");
+        //    $('.alert').addClass("hide");
+        //  });
+
+        function editSiswa(nisn){
             var modalName = "#editTable" + nisn;
             $(modalName).modal();
         }
