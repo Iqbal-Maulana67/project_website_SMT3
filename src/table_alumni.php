@@ -1,3 +1,82 @@
+<?php
+require('config/koneksi.php');
+
+session_start();
+
+if (isset($_POST['submit_insert'])) {
+    insertDataAlumni();
+}
+
+// function tampilAlumni()
+function insertDataAlumni()
+{
+
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $nisn = $_POST['nisn'];
+    $nama = $_POST['nama_siswa'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $no_hp = $_POST['no_hp'];
+    $alamat = $_POST['alamat'];
+    $tahun_lulusan = $_POST['tahun_lulusan'];
+    $status_alumni = $_POST['status_alumni'];
+    $nama_instansi = $_POST['nama_instansi'];
+    $password = $_POST['password'];
+
+    $query = "INSERT INTO siswa_alumni VALUES(
+        '" . $nisn . "',
+        '" . $nama . "',
+        '" . $jenis_kelamin . "',
+        '" . $no_hp . "',
+        '" . $alamat . "',
+        '" . $tahun_lulusan . "',
+        '" . $status_alumni . "',
+        '" . $nama_instansi . "',
+        '" . $password . "')";
+
+    $sql = mysqli_query($koneksi, $query);
+}
+
+function deleteDataAlumni($nisn)
+{
+
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $sql = mysqli_query(
+        $koneksi,
+        "DELETE FROM siswa_alumni WHERE nisn='$nisn'"
+    );
+}
+
+function editDataAlumni()
+{
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $nisn = $_POST['nisn'];
+    $nama = $_POST['nama_siswa'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $no_hp = $_POST['no_hp'];
+    $alamat = $_POST['alamat'];
+    $tahun_lulusan = $_POST['tahun_lulusan'];
+    $status_alumni = $_POST['status_alumni'];
+    $nama_instansi = $_POST['nama_instansi'];
+    $password = $_POST['password'];
+
+    $sql = mysqli_query(
+        $koneksi,
+        "UPDATE siswa_alumni SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', no_hp= '$no_hp', alamat='$alamat', tahun_lulusan='$tahun_lulusan', status_alumni='$status_alumni', nama_instansi='$nama_instansi', password='$password'"
+    );
+}
+
+function IfOptionSelected($data, $selectedData)
+{
+    if ($data == $selectedData) {
+        return true;
+    }
+    return false;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,9 +134,9 @@
             <div class="sidebar-heading">
                 Data Sekolah
             </div>
-            
+
             <li class="nav-item">
-                <a class="nav-link" href="validation_page.php">    
+                <a class="nav-link" href="validation_page.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Daftar Antrian</span>
                 </a>
@@ -124,7 +203,8 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] 
+                                                                                            ?></span>
                                 <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -260,7 +340,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="table_siswa.php" method="POST">
+                                            <form action="table_alumni.php" method="POST">
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">NISN</label>
                                                     <input type="text" class="form-control" id="nisn" name="nisn">
@@ -291,15 +371,19 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
+                                                    <select class="custom-select" id="jenis_kelamin" name="status_alumni">
                                                         <option selected>Status Alumni</option>
-                                                        <option value="L">Kerja</option>
-                                                        <option value="P">Kuliah</option>
+                                                        <option value="Kerja">Kerja</option>
+                                                        <option value="Kuliah">Kuliah</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Nama Instansi</label>
                                                     <input type="text" class="form-control" id="nama_instansi" name="nama_instansi">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Password</label>
+                                                    <input type="text" class="form-control" id="password" name="password">
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
@@ -329,21 +413,94 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" style="width: 50%;"></button>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" style="width: 50%;"></button>
-                                            </td>
-                                        </tr>
+                                        <?php
+                                        $query = "SELECT * FROM siswa_alumni";
+                                        $result = mysqli_query($koneksi, $query);
+
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo '
+                                                <tr>
+                                                    <td id="nisn" class="nisn">' . $row['nisn'] . '</td>
+                                                    <td>' . $row['nama'] . '</td>
+                                                    <td>' . $row['jenis_kelamin'] . '</td>
+                                                    <td>' . $row['nomer_hp'] . '</td>
+                                                    <td>' . $row['alamat'] . '</td>
+                                                    <td>' . $row['tahun_lulusan'] . '</td>
+                                                    <td>' . $row['status_alumni'] . '</td>
+                                                    <td>' . $row['nama_instansi'] . '</td>
+                                                    <td>' . $row['password'] . '</td>
+                                                    <td style="text-align: center;">
+                                                        <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="editAlumni(`' . $row['nisn'] . '`)" ></button>
+                                                        <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <div class="modal fade" id="editDataModal'.$row['nisn'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Siswa</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="table_alumni.php" method="POST">
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">NISN</label>
+                                                    <input readonly type="text" class="form-control" id="nisn" name="nisn" value="' . $row['nisn'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Nama Siswa Alumni</label>
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" value="' . $row['nama'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Jenis Kelamin</label>
+                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
+                                                        <option selected>Jenis Kelamin</option>
+                                                        <option value="L" ' . ((IfOptionSelected("L", $row['jenis_kelamin'])) ? 'selected="selected"' : "") . '>Laki-laki</option>
+                                                        <option value="P" ' . ((IfOptionSelected("P", $row['jenis_kelamin'])) ? 'selected="selected"' : "") . '>Perempuan</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Nomer HP</label>
+                                                    <input type="text" class="form-control" id="no_hp" name="no_hp" value="' . $row['nomer_hp'] .'">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Alamat</label>
+                                                    <textarea class="form-control" id="alamat" name="alamat">' . $row['alamat'] . '</textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Tahun Lulusan</label>
+                                                    <input type="text" class="form-control" id="tahun_lulusan" name="tahun_lulusan" value="' . $row['tahun_lulusan'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Status Alumni</label>
+                                                    <select class="custom-select" id="jenis_kelamin" name="status_alumni">
+                                                        <option selected>Status Alumni</option>
+                                                        <option value="Kerja" ' . ((IfOptionSelected("Kerja", $row['status_alumni'])) ? 'selected="selected"' : "") . '>Kerja</option>
+                                                        <option value="Kuliah"  ' . ((IfOptionSelected("Kuliah", $row['status_alumni'])) ? 'selected="selected"' : "") . '>Kuliah</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Nama Instansi</label>
+                                                    <input type="text" class="form-control" id="nama_instansi" name="nama_instansi" value="' . $row['nama_instansi'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Password</label>
+                                                    <input type="text" class="form-control" id="password" name="password" value="' . $row['password'] . '">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success" name="submit_insert">Masukkan Data</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>';
+                                        }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -410,11 +567,12 @@
             table.draw();
         });
 
-        function edit(nisn) {
-            var modalName = "#editTable" + nisn;
+        function editAlumni(nisn) {
+            var modalName = "#editDataModal" + nisn;
             $(modalName).modal();
         }
     </script>
 
 </body>
+
 </html>
