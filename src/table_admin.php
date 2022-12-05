@@ -1,3 +1,85 @@
+<?php
+require('config/koneksi.php');
+session_start();
+
+if (isset($_POST['submit_insert'])) {
+    insertDataAdmin();
+}
+
+if (isset($_POST['submit_edit'])) {
+    editDataAdmin();
+}
+
+if (isset($_POST['submit_hapus'])) {
+    deleteDataAdmin($_POST['submit_hapus']);
+}
+
+// Menampilkan jumlah admin untuk card body
+function tampilAdmin()
+{
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+    $jumlahAdmin = 0;
+    $query = "SELECT COUNT('username') FROM admin";
+    $result = mysqli_query($koneksi, $query);
+    $row = mysqli_fetch_array($result);
+    $jumlahAdmin = $row["COUNT('username')"];
+    return $jumlahAdmin;
+}
+
+// function tampilDataAdmin
+function insertDataAdmin()
+{
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $nama_admin = $_POST['nama_admin'];
+    $level = 0;
+  
+    $query = "INSERT INTO admin VALUES(
+        '" . $username . "',
+        '" . $password . "',
+        '" . $nama_admin . "',
+        '" . $level . "')";
+
+    $sql = mysqli_query($koneksi, $query);
+}
+
+function deleteDataAdmin($username)
+{
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $sql = mysqli_query(
+        $koneksi,
+        "DELETE FROM admin WHERE username='$username'"
+    );
+}
+
+function editDataAdmin()
+{
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $nama_admin = $_POST['nama_admin'];
+    $level = 0;
+   
+    $query = "UPDATE admin SET password='$password', nama_admin='$nama_admin', level='$level' WHERE username='$username'"; 
+
+    $sql = mysqli_query(
+        $koneksi,
+        $query
+    );
+}
+function IfOptionSelected($data, $selectedData)
+{
+    if ($data == $selectedData) {
+        return true;
+    }
+    return false;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -163,7 +245,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Admin</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= tampilAdmin() ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -221,18 +303,18 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="table_siswa.php" method="POST">
+                                            <form action="table_admin.php" method="POST">
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Username</label>
                                                     <input type="text" class="form-control" id="username" name="username">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
+                                                    <label for="recipient-name" class="col-form-label">Password</label>
+                                                    <input type="text" class="form-control" id="nama_siswa" name="password">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Password</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
+                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
@@ -250,25 +332,92 @@
                                     <thead>
                                         <tr>
                                             <th>Username</th>
-                                            <th>Nama</th>
                                             <th>Password</th>
+                                            <th>Nama Admin</th>
+                                            <th>Level</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php
+                                        $query = "SELECT * FROM admin";
+                                        $result = mysqli_query($koneksi, $query);
+                                        $numrows = mysqli_num_rows($result);
+
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $dataRow = 0;
+                                            echo '
                                         <tr>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)" ></button>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
-                                            </td>
+                                            <td id="username" class="username">' . $row['username'] . '</td>
+                                            <td>' . $row['password'] . '</td>
+                                            <td>' . $row['nama_admin'] . '</td>
+                                            <td>' . $row['level'] . '</td>
+                                            <td>
+                                            <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="editAdmin(`' . $row['username'] . '`)"></button>
+                                            <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" onclick="deleteAdmin(`' . $row['username'] . '`)"></button>
+                                        </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                            
+                                        <div class="modal" id="hapusTable' . $row['username'] . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4">
+                                                <form action="table_admin.php" method="POST">
+                                                    <h3>Konfirmasi</h3>
+                                                        <p class="r3 px-md-5 px-sm-1">Apa anda yakin menghapus data ini?.</p>
+                                                        <div class="text-center mb-3">
+                                                        <button type="button" class="btn btn-secondary col-xl-4" data-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger col-xl-4" name="submit_hapus" value="' . $row['username'] . '">Hapus</button>
+                                                        </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="modal fade" id="editDataTable'.$row['username'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Tambah Data Admin</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="table_admin.php" method="POST">
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Username</label>
+                                                    <input readonly type="text" class="form-control" id="username" name="username" value="' . $row['username'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Password</label>
+                                                    <input type="text" class="form-control" id="nama_siswa" name="password" value="' . $row['password'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
+                                                    <input type="text" class="form-control" id="nama_admin" name="nama_admin" value="' . $row['nama_admin'] . '">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Level</label>
+                                                    <input type="text" class="form-control" id="level" name="level" value="' . $row['level'] .'">
+                                                </div>
+                                                
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success" name="submit_edit">Masukkan Data</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                ';
+                            }
+                            ?>
+
+                         </tbody>
+                        </table>
+                     </div>
+                     </div>
                     </div>
 
                 </div>
@@ -331,8 +480,12 @@
             table.draw();
         });
 
-        function edit(nisn) {
-            var modalName = "#editTable" + nisn;
+        function editAdmin(username) {
+            var modalName = "#editDataTable" + username;
+            $(modalName).modal();
+        }
+            function deleteAdmin(username) {
+            var modalName = "#hapusTable" + username;
             $(modalName).modal();
         }
     </script>
