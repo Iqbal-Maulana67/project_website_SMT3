@@ -1,3 +1,62 @@
+<?php
+    require 'config/koneksi.php';
+
+
+    if(isset($_POST['submit_accept'])){
+        acceptedForm();
+    }else if(isset($_POST['submit_denied'])){
+        deniedForm();
+    }
+
+    function totalAntrian(){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $jumlah = 0;
+        $sql = "SELECT COUNT('nisn') FROM validasi_status_alumni";
+        $result = mysqli_query($koneksi, $sql);
+        $row = mysqli_fetch_array($result);
+        $jumlah = $row["COUNT('nisn')"];
+
+        return $jumlah;
+    }
+
+    function acceptedForm(){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $nisn = $_POST['nisn'];
+        $status_alumni = $_POST['status_alumni'];
+        $nama_instansi = $_POST['nama_instansi'];
+
+        $sql = "UPDATE siswa_alumni SET status_alumni = '$status_alumni', nama_instansi = '$nama_instansi' WHERE nisn = '$nisn'";
+        mysqli_query($koneksi, $sql);
+
+        $sql = "SELECT img_pendukung FROM validasi_status_alumni WHERE nisn = '$nisn'";
+        $result = mysqli_query($koneksi, $sql);
+        $row = $result->fetch_array();
+
+        unlink('../img/validasi_status_images/'.$row['img_pendukung']);
+
+        $sql = "DELETE FROM validasi_status_alumni WHERE nisn = '$nisn'";
+        mysqli_query($koneksi, $sql);
+    }
+
+    function deniedForm(){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $nisn = $_POST['nisn'];
+        
+        $sql = "SELECT img_pendukung WHERE nisn = '$nisn'";
+        $result = mysqli_query($koneksi, $sql);
+        $row = $result->fetch_array();
+        
+        unlink('../img/validasi_status_images/'.$row['img_pendukung']);
+        
+        $sql = "DELETE FROM validasi_status_alumni WHERE nisn = '$nisn'";
+        mysqli_query($koneksi, $sql);
+    }   
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +76,7 @@
 
     <!-- Custom styles for this template -->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/mylogin.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
     <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -55,9 +115,9 @@
             <div class="sidebar-heading">
                 Data Sekolah
             </div>
-            
+
             <li class="nav-item">
-                <a class="nav-link" href="#">    
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Daftar Antrian</span>
                 </a>
@@ -124,7 +184,8 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] 
+                                                                                            ?></span>
                                 <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -163,7 +224,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Antrian</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= totalAntrian() ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-person-booth fa-2x text-gray-300"></i>
@@ -185,65 +246,81 @@
                             </div>
 
                             <!-- View modal -->
-                            <div class="modal fade" id="insertDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Detail Validasi Alumni</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="table_siswa.php" method="POST">
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">NISN</label>
-                                                    <input type="text" class="form-control" id="nisn" name="nama_siswa" value="(KOSONG)" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Nama Alumni</label>
-                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_siswa" value="(KOSONG)" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_siswa" value="(KOSONG)" readonly>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Gambar</label>
-                                                    <div class="form-control">
 
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tolak Validasi</button>
-                                            <button type="submit" class="btn btn-success" name="submit_insert">Terima Validasi</button>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- Table Data -->
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
+                                            <th>NISN</th>
                                             <th>Nama</th>
-                                            <th>Password</th>
+                                            <th>Status</th>
+                                            <th>Nama Instansi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td style="text-align: center;">    
-                                                <button class="btn btn-warning fas fa-eye" type="button" id="editButton" onclick="edit(`' . $row['nisn'] . '`)"  data-toggle="modal" data-target="#insertDataModal"></button>
-                                            </td>
-                                        </tr>
+                                        <?php
+                                        $sql = "SELECT vd_alumni.nisn, siswa_alumni.nama, vd_alumni.status_alumni, vd_alumni.nama_instansi, vd_alumni.img_pendukung FROM validasi_status_alumni AS vd_alumni JOIN siswa_alumni ON siswa_alumni.nisn = vd_alumni.nisn";
+                                        $result = mysqli_query($koneksi, $sql);
+
+                                        while ($row = $result->fetch_array()) {
+                                            echo '
+                                                <tr>
+                                                    <td>' . $row['nisn'] . '</td>
+                                                    <td>' . $row['nama'] . '</td>
+                                                    <td>' . $row['status_alumni'] . '</td>
+                                                    <td>' . $row['nama_instansi'] . '</td>
+                                                    <td style="text-align: center;">    
+                                                        <button class="btn btn-warning fas fa-eye" type="button" id="editButton" onclick="viewModal(`' . $row['nisn'] . '`)"></button>
+                                                    </td>
+                                                </tr>
+
+                                                <div class="modal fade" id="viewModal'.$row['nisn'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">Detail Validasi Alumni</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="validation_page.php" method="POST">
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name" class="col-form-label">NISN</label>
+                                                                    <input type="text" class="form-control" id="nisn" name="nisn" value="'.$row['nisn'].'" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name" class="col-form-label">Nama Alumni</label>
+                                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_alumni" value="'.$row['nama'].'" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name" class="col-form-label">Status Alumni</label>
+                                                                    <input type="text" class="form-control" id="nama_alumni" name="status_alumni" value="'.$row['status_alumni'].'" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name" class="col-form-label">Nama Instansi</label>
+                                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_instansi" value="'.$row['nama_instansi'].'" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name" class="col-form-label">Gambar</label>
+                                                                    
+                                                                        <img src="../img/validasi_status_images/'.$row['img_pendukung'].'" alt="" class="berita-img-view">                
+                                                                </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-danger" nama="submit_denied">Tolak Validasi</button>
+                                                            <button type="submit" class="btn btn-success" name="submit_accept">Terima Validasi</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                ';
+                                        }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -310,11 +387,12 @@
             table.draw();
         });
 
-        function edit(nisn) {
-            var modalName = "#editTable" + nisn;
+        function viewModal(id) {
+            var modalName = "#viewModal" + id;
             $(modalName).modal();
         }
     </script>
 
 </body>
+
 </html>
