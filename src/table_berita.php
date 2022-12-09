@@ -1,3 +1,29 @@
+<?php
+    require 'config/koneksi.php';
+
+    function totalData($data){
+        $jumlahBerita = 0;
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        if($data == "Berita"){
+            $sql = "SELECT COUNT('id_berita') FROM berita";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $jumlahBerita = $row["COUNT('id_berita')"];
+            return $jumlahBerita;
+        } else if($data == "Rekomendasi"){
+            $sql = "SELECT COUNT('id_berita') FROM berita WHERE status_berita = 'REKOMENDASI'";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $jumlahBerita = $row["COUNT('id_berita')"];
+            return $jumlahBerita;
+        }
+        return $jumlahBerita;
+    }
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -163,7 +189,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Berita</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= totalData("Berita") ?> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -181,7 +207,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Berita Rekomendasi</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= totalData("Rekomendasi") ?> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -199,7 +225,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <a href="detail_berita_page.php">
+                                <a href="tambah_berita_page.php">
                                     <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
                                 </a>
                             </div>
@@ -267,16 +293,51 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Awoo</td>   
-                                            <td>Awoo</td>
-                                            <td>Awoo</td>
-                                            <td style="text-align: center;">    
-                                                <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="" data-toggle="modal" data-target="#insertDataModal"></button>
-                                                <a href="detail_berita_page.php"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>
-                                                <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" data-toggle="modal" data-target="#hapusTableBerita"></button>
-                                            </td>
-                                        </tr>
+                                    <?php
+                                        $sql = "SELECT * FROM berita";
+                                        $result = mysqli_query($koneksi, $sql);
+
+                                        while($row = mysqli_fetch_array($result)){
+                                            echo '
+                                            <tr>
+                                                <td>'. $row['id_berita'] .'</td>
+                                                <td>'. $row['judul'] .'</td>
+                                                <td>'. $row['status_berita'] .'</td>
+                                                <td style="text-align: center;">
+                                                    <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="viewModal(`'.$row['id_berita'].'`)"></button>
+                                                    <a href="edit_berita_page.php?id_berita='.$row['id_berita'].'"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>
+                                                    <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" data-toggle="modal" data-target="#hapusTableBerita"></button>
+                                                </td>
+                                            </tr>
+
+                                            <div class="modal fade" id="viewModal'.$row['id_berita'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">View Berita</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="h4 mb-2 text-gray-800">
+                                                        '.$row['judul'].'
+                                                        </h1>
+                                                        <hr>
+                                                        <img src="../img/berita_image/'.$row['thumbnail_berita'].'" alt="" class="berita-img-view">
+                                                        <p class="berita-description">
+                                                        '.$row['deskripsi'].'
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            ';
+                                        }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -343,8 +404,13 @@
             table.draw();
         });
 
-        function edit(nisn) {
-            var modalName = "#editTable" + nisn;
+        function viewModal(id) {
+            var modalName = "#viewModal" + id;
+            $(modalName).modal();
+        }
+
+        function editModal(id) {
+            var modalName = "#editModal" + id;
             $(modalName).modal();
         }
     </script>

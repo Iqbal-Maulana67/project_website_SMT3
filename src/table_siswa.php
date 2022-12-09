@@ -1,156 +1,160 @@
 <?php
-require('config/koneksi.php');
+    require('config/koneksi.php');
+    require('model/history_logs.php');
 
-session_start();
+    session_start();
 
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])) {
-    header('Location: login.php');
-}
+    if (!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])) {
+        header('Location: login.php');
+    }
 
-if (isset($_POST['submit_insert'])) {
-    insertDataSiswa();
-}
+    if (isset($_POST['submit_insert'])) {
+        insertDataSiswa();
+    }
 
-if (isset($_POST['submit_edit'])) {
-    EditDataSiswa();
-}
+    if (isset($_POST['submit_edit'])) {
+        EditDataSiswa();
+    }
 
-if (isset($_POST['submit_hapus'])) {
-    deleteDataSiswa($_POST['submit_hapus']);
-}
+    if (isset($_POST['submit_hapus'])) {
+        deleteDataSiswa($_POST['submit_hapus']);
+    }
 
-// Menampilkan jumlah siswa untuk card body
-function tampilSiswa($siswaArgs)
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-    if ($siswaArgs == 'all') {
-        $jumlahSiswa = 0;
-        $query = "SELECT COUNT('NISN') FROM siswa_aktif";
+    // Menampilkan jumlah siswa untuk card body
+    function tampilSiswa($siswaArgs)
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        if ($siswaArgs == 'all') {
+            $jumlahSiswa = 0;
+            $query = "SELECT COUNT('NISN') FROM siswa_aktif";
+            $result = mysqli_query($koneksi, $query);
+            $row = mysqli_fetch_array($result);
+            $jumlahSiswa = $row["COUNT('NISN')"];
+            return $jumlahSiswa;
+        } else if ($siswaArgs == 'X') {
+            $jumlahSiswa = 0;
+            $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'X'";
+            $result = mysqli_query($koneksi, $query);
+            $row = mysqli_fetch_array($result);
+            $jumlahSiswa = $row["COUNT('NISN')"];
+            return $jumlahSiswa;
+        } else if ($siswaArgs == 'XI') {
+            $jumlahSiswa = 0;
+            $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XI'";
+            $result = mysqli_query($koneksi, $query);
+            $row = mysqli_fetch_array($result);
+            $jumlahSiswa = $row["COUNT('NISN')"];
+            return $jumlahSiswa;
+        } else if ($siswaArgs == 'XII') {
+            $jumlahSiswa = 0;
+            $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XII'";
+            $result = mysqli_query($koneksi, $query);
+            $row = mysqli_fetch_array($result);
+            $jumlahSiswa = $row["COUNT('NISN')"];
+            return $jumlahSiswa;
+        }
+    }
+
+    function insertDataSiswa()
+    {
+        $historyController = new historyLogs();
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $nisn = $_POST['nisn'];
+        $nama = $_POST['nama_siswa'];
+        $jenis_kelamin = $_POST['jenis_kelamin'];
+        $kelas = $_POST['kelas'];
+        $golongan = $_POST['golongan'];
+        $jurusan = fetchCariJurusan($_POST['jurusan']);
+        $nama_ortu = $_POST['nama_ortu'];
+        $alamat = $_POST['alamat'];
+        $status_siswa = $_POST['status'];
+
+        $query = "INSERT INTO siswa_aktif VALUES(
+            '".$nisn."',
+            '".$nama."',
+            '".$jenis_kelamin."',
+            '".$kelas."',
+            '".$golongan."',
+            '".$jurusan['id_jurusan']."',
+            '".$nama_ortu."',
+            '".$alamat."',
+            '".$status_siswa."')";
+
+        mysqli_query($koneksi, $query);
+
+        $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $nisn, 'Data Alumni');
+    }
+
+    function EditDataSiswa()
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $nisn = $_POST['nisn'];
+        $nama = $_POST['nama_siswa'];
+        $jenis_kelamin = $_POST['jenis_kelamin'];
+        $kelas = $_POST['kelas'];
+        $golongan = $_POST['golongan'];
+        $jurusan = fetchCariJurusan($_POST['jurusan']);
+        $nama_ortu = $_POST['nama_ortu'];
+        $alamat = $_POST['alamat'];
+        $status_siswa = $_POST['status'];
+
+        $sql = mysqli_query(
+            $koneksi,
+            "UPDATE siswa_aktif SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', kelas= '$kelas', golongan='$golongan', id_jurusan='" . $jurusan['id_jurusan'] . "', nama_ortu='$nama_ortu', alamat='$alamat', status='$status_siswa' WHERE nisn = '$nisn'"
+        );
+    }
+
+    function deleteDataSiswa($nisn)
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $sql = mysqli_query(
+            $koneksi,
+            "DELETE FROM siswa_aktif WHERE nisn='$nisn'"
+        );
+    }
+
+    function fetchDataJurusan()
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        $query = "SELECT * FROM jurusan";
+        $result = mysqli_query($koneksi, $query);
+        while ($row = mysqli_fetch_array($result)) {
+            echo '<option value="' . $row['nama_jurusan'] . '">' . $row['nama_jurusan'] . '</option>';
+        }
+    }
+
+    function fetchEditDataJurusan($selectedData)
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        $query = "SELECT * FROM jurusan";
+        $result = mysqli_query($koneksi, $query);
+        while ($row = mysqli_fetch_array($result)) {
+            echo '<option value="' . $row['nama_jurusan'] . '" ' . ((IfOptionSelected($row['nama_jurusan'], $selectedData)) ? 'selected="seledted"' : "") . '>' . $row['nama_jurusan'] . '</option>';
+        }
+    }
+
+
+    function fetchCariJurusan($nama_jurusan)
+    {
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        $query = "SELECT * FROM jurusan WHERE nama_jurusan = '$nama_jurusan'";
         $result = mysqli_query($koneksi, $query);
         $row = mysqli_fetch_array($result);
-        $jumlahSiswa = $row["COUNT('NISN')"];
-        return $jumlahSiswa;
-    } else if ($siswaArgs == 'X') {
-        $jumlahSiswa = 0;
-        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'X'";
-        $result = mysqli_query($koneksi, $query);
-        $row = mysqli_fetch_array($result);
-        $jumlahSiswa = $row["COUNT('NISN')"];
-        return $jumlahSiswa;
-    } else if ($siswaArgs == 'XI') {
-        $jumlahSiswa = 0;
-        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XI'";
-        $result = mysqli_query($koneksi, $query);
-        $row = mysqli_fetch_array($result);
-        $jumlahSiswa = $row["COUNT('NISN')"];
-        return $jumlahSiswa;
-    } else if ($siswaArgs == 'XII') {
-        $jumlahSiswa = 0;
-        $query = "SELECT COUNT('NISN') FROM siswa_aktif WHERE kelas = 'XII'";
-        $result = mysqli_query($koneksi, $query);
-        $row = mysqli_fetch_array($result);
-        $jumlahSiswa = $row["COUNT('NISN')"];
-        return $jumlahSiswa;
+
+        return $row;
     }
-}
 
-function insertDataSiswa()
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-
-    $nisn = $_POST['nisn'];
-    $nama = $_POST['nama_siswa'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $kelas = $_POST['kelas'];
-    $golongan = $_POST['golongan'];
-    $jurusan = fetchCariJurusan($_POST['jurusan']);
-    $nama_ortu = $_POST['nama_ortu'];
-    $alamat = $_POST['alamat'];
-    $status_siswa = $_POST['status'];
-
-    $query = "INSERT INTO siswa_aktif VALUES(
-        '".$nisn."',
-        '".$nama."',
-        '".$jenis_kelamin."',
-        '".$kelas."',
-        '".$golongan."',
-        '".$jurusan['id_jurusan']."',
-        '".$nama_ortu."',
-        '".$alamat."',
-        '".$status_siswa."')";
-
-    $sql = mysqli_query($koneksi, $query);
-}
-
-function EditDataSiswa()
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-
-    $nisn = $_POST['nisn'];
-    $nama = $_POST['nama_siswa'];
-    $jenis_kelamin = $_POST['jenis_kelamin'];
-    $kelas = $_POST['kelas'];
-    $golongan = $_POST['golongan'];
-    $jurusan = fetchCariJurusan($_POST['jurusan']);
-    $nama_ortu = $_POST['nama_ortu'];
-    $alamat = $_POST['alamat'];
-    $status_siswa = $_POST['status'];
-
-    $sql = mysqli_query(
-        $koneksi,
-        "UPDATE siswa_aktif SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', kelas= '$kelas', golongan='$golongan', id_jurusan='" . $jurusan['id_jurusan'] . "', nama_ortu='$nama_ortu', alamat='$alamat', status='$status_siswa' WHERE nisn = '$nisn'"
-    );
-}
-
-function deleteDataSiswa($nisn)
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-
-    $sql = mysqli_query(
-        $koneksi,
-        "DELETE FROM siswa_aktif WHERE nisn='$nisn'"
-    );
-}
-
-function fetchDataJurusan()
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-    $query = "SELECT * FROM jurusan";
-    $result = mysqli_query($koneksi, $query);
-    while ($row = mysqli_fetch_array($result)) {
-        echo '<option value="' . $row['nama_jurusan'] . '">' . $row['nama_jurusan'] . '</option>';
+    function IfOptionSelected($data, $selectedData)
+    {
+        if ($data == $selectedData) {
+            return true;
+        }
+        return false;
     }
-}
-
-function fetchEditDataJurusan($selectedData)
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-    $query = "SELECT * FROM jurusan";
-    $result = mysqli_query($koneksi, $query);
-    while ($row = mysqli_fetch_array($result)) {
-        echo '<option value="' . $row['nama_jurusan'] . '" ' . ((IfOptionSelected($row['nama_jurusan'], $selectedData)) ? 'selected="seledted"' : "") . '>' . $row['nama_jurusan'] . '</option>';
-    }
-}
-
-
-function fetchCariJurusan($nama_jurusan)
-{
-    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
-    $query = "SELECT * FROM jurusan WHERE nama_jurusan = '$nama_jurusan'";
-    $result = mysqli_query($koneksi, $query);
-    $row = mysqli_fetch_array($result);
-
-    return $row;
-}
-
-function IfOptionSelected($data, $selectedData)
-{
-    if ($data == $selectedData) {
-        return true;
-    }
-    return false;
-}
 ?>
 
 <!DOCTYPE html>
