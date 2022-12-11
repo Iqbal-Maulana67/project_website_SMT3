@@ -3,11 +3,49 @@ require('config/koneksi.php');
 
 session_start();
 
+if (!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])) {
+    header('Location: login.php');
+}   
+
 if (isset($_POST['submit_insert'])) {
     insertDataAlumni();
 }
 
+if (isset($_POST['submit_edit'])) {
+    editDataAlumni();
+}
+
+if (isset($_POST['submit_hapus'])) {
+    deleteDataAlumni($_POST['submit_hapus']);
+}
 // function tampilAlumni()
+
+function tampilAlumni($alumniArgs){
+    $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+    if ($alumniArgs == 'all'){
+        $jumlahAlumni = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_alumni";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahAlumni = $row["COUNT('NISN')"];
+        return $jumlahAlumni;
+    }else if ($alumniArgs == 'Kuliah'){
+        $jumlahAlumni = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_alumni WHERE status_alumni = 'Kuliah'";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahAlumni = $row["COUNT('NISN')"];
+        return $jumlahAlumni;
+    }else if ($alumniArgs == 'Kerja'){
+        $jumlahAlumni = 0;
+        $query = "SELECT COUNT('NISN') FROM siswa_alumni WHERE status_alumni = 'Kerja'";
+        $result = mysqli_query($koneksi, $query);
+        $row = mysqli_fetch_array($result);
+        $jumlahAlumni = $row["COUNT('NISN')"];
+        return $jumlahAlumni;
+    }
+}
+
 function insertDataAlumni()
 {
 
@@ -62,9 +100,9 @@ function editDataAlumni()
     $nama_instansi = $_POST['nama_instansi'];
     $password = $_POST['password'];
 
-    $sql = mysqli_query(
+    mysqli_query(
         $koneksi,
-        "UPDATE siswa_alumni SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', no_hp= '$no_hp', alamat='$alamat', tahun_lulusan='$tahun_lulusan', status_alumni='$status_alumni', nama_instansi='$nama_instansi', password='$password'"
+        "UPDATE siswa_alumni SET nama='$nama', jenis_kelamin='$jenis_kelamin', nomer_hp= '$no_hp', alamat='$alamat', tahun_lulusan='$tahun_lulusan', status_alumni='$status_alumni', nama_instansi='$nama_instansi', password='$password' WHERE nisn = '$nisn'"
     );
 }
 
@@ -243,7 +281,7 @@ function IfOptionSelected($data, $selectedData)
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Alumni</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= tampilAlumni('all') ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -261,7 +299,7 @@ function IfOptionSelected($data, $selectedData)
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Alumni Kuliah</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= tampilAlumni('Kuliah') ?> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -279,7 +317,7 @@ function IfOptionSelected($data, $selectedData)
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Alumni Kerja</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> KOSONG </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= tampilAlumni('Kerja') ?> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -431,9 +469,24 @@ function IfOptionSelected($data, $selectedData)
                                                     <td>' . $row['password'] . '</td>
                                                     <td style="text-align: center;">
                                                         <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="editAlumni(`' . $row['nisn'] . '`)" ></button>
-                                                        <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton"></button>
+                                                        <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" onclick="deleteDataAlumni(`' . $row['nisn'] . '`)" ></button>
                                                     </td>
                                                 </tr>
+
+                                                <div class="modal" id="hapusTable' . $row['nisn'] . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4">
+                                                        <form action="table_alumni.php" method="POST">
+                                                            <h3>Konfirmasi</h3>
+                                                                <p class="r3 px-md-5 px-sm-1">Apa anda yakin menghapus data ini?.</p>
+                                                                <div class="text-center mb-3">
+                                                                <button type="button" class="btn btn-secondary col-xl-4" data-dismiss="modal">Batal</button>
+                                                                <button type="submit" class="btn btn-danger col-xl-4" name="submit_hapus" value="' . $row['nisn'] . '">Hapus</button>
+                                                                </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                </div>
                                                 
                                                 <div class="modal fade" id="editDataModal'.$row['nisn'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -493,7 +546,7 @@ function IfOptionSelected($data, $selectedData)
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success" name="submit_insert">Masukkan Data</button>
+                                            <button type="submit" class="btn btn-success" name="submit_edit">Ubah Data</button>
                                         </div>
                                         </form>
                                     </div>
@@ -571,8 +624,14 @@ function IfOptionSelected($data, $selectedData)
             var modalName = "#editDataModal" + nisn;
             $(modalName).modal();
         }
+
+        function deleteDataAlumni(nisn) {
+            var modalName = "#hapusTable" + nisn;
+            $(modalName).modal();
+        }
+
     </script>
 
 </body>
 
-</html>
+</html> 
