@@ -345,7 +345,7 @@ function IfOptionSelected($data, $selectedData)
                             <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
 
-                                    <form method="post" enctype="multipart/form-data" action="import_data.php">
+                                    <form method="post" enctype="multipart/form-data" action="model/import_alumni.php">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="">Import Data</h5>
@@ -354,13 +354,34 @@ function IfOptionSelected($data, $selectedData)
                                                 <p>Silahkan masukkan excel di bawah</p>
                                                 <div class="row">
                                                     <div class="col-xl-12">
-                                                        <input name="filepegawai" type="file" required="required">
+                                                        <input name="namafile" type="file" required="required">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success">Import Data</button>
+                                                <button type="submit" class="btn btn-success" name="submit_import" >Import Data</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Export Data Modal -->
+                            <div class="modal fade" id="exportExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+
+                                    <form method="post" enctype="multipart/form-data" action="model/export_alumni.php">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="">Import Data</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Apa anda yakin untuk melakukan export data ke Excel?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-success">Export Data</button>
                                             </div>
                                         </div>
                                     </form>
