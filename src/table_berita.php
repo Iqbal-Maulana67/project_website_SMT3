@@ -1,6 +1,10 @@
 <?php
     require 'config/koneksi.php';
 
+    if(isset($_POST['submit_hapus'])){
+        hapusBerita();
+    }
+
     function totalData($data){
         $jumlahBerita = 0;
         $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
@@ -11,16 +15,24 @@
             $row = mysqli_fetch_array($result);
             $jumlahBerita = $row["COUNT('id_berita')"];
             return $jumlahBerita;
-        } else if($data == "Rekomendasi"){
-            $sql = "SELECT COUNT('id_berita') FROM berita WHERE status_berita = 'REKOMENDASI'";
-            $result = mysqli_query($koneksi, $sql);
-            $row = mysqli_fetch_array($result);
-            $jumlahBerita = $row["COUNT('id_berita')"];
-            return $jumlahBerita;
         }
+
         return $jumlahBerita;
     }
 
+    function hapusBerita(){
+        $id_berita = $_POST['submit_hapus'];
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+        $sql = "SELECT * FROM berita WHERE id_berita = '$id_berita'";
+        $result = mysqli_query($koneksi, $sql);
+        $row = $result->fetch_array();
+        unlink('../img/berita_image/'.$row['thumbnail_berita']);
+
+        $sql = "DELETE FROM berita WHERE id_berita = '$id_berita'";
+
+        mysqli_query($koneksi, $sql);
+    }
 
 ?>
 
@@ -266,20 +278,7 @@
                             </div>
 
                             <!-- Hapus Data Modal -->
-                            <div class="modal" id="hapusTableBerita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4" style="border-radius: 20px;">
-                                        <form action="table_siswa.php" method="POST">
-                                            <h3>Konfirmasi</h3>
-                                                <p class="r3 px-md-5 px-sm-1">Apa anda yakin menghapus data ini?.</p>
-                                                <div class="text-center mb-3">
-                                                <button type="button" class="btn btn-secondary col-xl-4 col-md-4 col-sm-4" data-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-danger col-xl-4 col-md-4 col-sm-4" name="submit_hapus" value="' . $row['nisn'] . '">Hapus</button>
-                                                </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                             <!-- Table Data -->
                             <div class="table-responsive">
@@ -306,7 +305,7 @@
                                                 <td style="text-align: center;">
                                                     <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="viewModal(`'.$row['id_berita'].'`)"></button>
                                                     <a href="edit_berita_page.php?id_berita='.$row['id_berita'].'"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>
-                                                    <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" data-toggle="modal" data-target="#hapusTableBerita"></button>
+                                                    <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" data-toggle="modal" data-target="#hapusTableBerita'.$row['id_berita'].'"></button>
                                                 </td>
                                             </tr>
 
@@ -332,6 +331,21 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal" id="hapusTableBerita'.$row['id_berita'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content py-md-5 px-md-4 p-sm-3 p-4" style="border-radius: 20px;">
+                                                    <form action="table_berita.php" method="POST">
+                                                        <h3>Konfirmasi</h3>
+                                                            <p class="r3 px-md-5 px-sm-1">Apa anda yakin menghapus data ini?.</p>
+                                                            <div class="text-center mb-3">
+                                                            <button type="button" class="btn btn-secondary col-xl-4 col-md-4 col-sm-4" data-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-danger col-xl-4 col-md-4 col-sm-4" name="submit_hapus" value="' . $row['id_berita'] . '">Hapus</button>
+                                                            </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

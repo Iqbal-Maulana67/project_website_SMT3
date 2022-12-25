@@ -192,7 +192,7 @@
                     Tambah Data Berita
                     </h1>
                     <hr>
-                    <form action="detail_berita_page.php" method="post" enctype="multipart/form-data">
+                    <form action="tambah_berita_page.php" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">ID Berita</label>
                             <input type="text" class="form-control" id="id_berita" name="id_berita">
