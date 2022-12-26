@@ -210,24 +210,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Card 2 -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Berita Rekomendasi</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <?= totalData("Rekomendasi") ?> </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-newspaper fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- DataTable -->
@@ -287,7 +269,6 @@
                                         <tr>
                                             <th>id_berita</th>
                                             <th>Judul</th>
-                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -301,7 +282,6 @@
                                             <tr>
                                                 <td>'. $row['id_berita'] .'</td>
                                                 <td>'. $row['judul'] .'</td>
-                                                <td>'. $row['status_berita'] .'</td>
                                                 <td style="text-align: center;">
                                                     <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="viewModal(`'.$row['id_berita'].'`)"></button>
                                                     <a href="edit_berita_page.php?id_berita='.$row['id_berita'].'"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>

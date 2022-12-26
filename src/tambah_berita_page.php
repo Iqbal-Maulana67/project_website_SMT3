@@ -1,4 +1,7 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
+
     require 'config/koneksi.php';
     
     if(isset($_POST['submit_insert'])){
@@ -11,7 +14,6 @@
         $id_berita = $_POST['id_berita'];
         $judul = $_POST['judul']; 
         $deskripsi = $_POST['deskripsi_berita'];
-        $status_berita = $_POST['status_berita'];
         
         $ext_file = pathinfo($_FILES['namafile']['name'], PATHINFO_EXTENSION);
         $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
@@ -22,13 +24,48 @@
         echo $ext_file;
 
         if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-            $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, deskripsi, status_berita)
-            VALUES ('$id_berita', '$judul', '$nama_file_baru', '$deskripsi', '$status_berita')";
+            $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, deskripsi)
+            VALUES ('$id_berita', '$judul', '$nama_file_baru', '$deskripsi')";
             mysqli_query($koneksi, $sql);       
 
             move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
             header('Location: table_berita.php');
         }
+    }
+
+    function countGenerator($numb){
+        $numb++;
+        if(strlen($numb) > 2){
+            return $numb;
+        }else if(strlen($numb) > 1){
+            $numb = "0".$numb;
+            return $numb;
+        }else if(strlen($numb) > 0){
+            $numb = "00".$numb;
+            return $numb;
+        }
+    }
+
+    function idBeritaGenerator(){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        
+        $date = date("d");
+        $month = date("m");
+        $year = substr(date("Y"), 2);
+
+        $sql = "SELECT id_berita FROM berita WHERE id_berita LIKE 'BRT$date$month$year%' ORDER BY id_berita DESC";
+        $result = mysqli_query($koneksi, $sql);
+        if($row = $result->fetch_array()){
+            $countIDs = substr($row['id_berita'], 9);
+            $newIDs = "BRT$date$month$year".countGenerator($countIDs);
+            return $newIDs;
+        }else{
+            $newIDs = "BRT$date$month$year"."001";
+            return $newIDs;
+        }
+
+        
+
     }
 
 ?>
@@ -193,21 +230,10 @@
                     </h1>
                     <hr>
                     <form action="tambah_berita_page.php" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">ID Berita</label>
-                            <input type="text" class="form-control" id="id_berita" name="id_berita">
-                        </div>
+                            <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= idBeritaGenerator() ?>" hidden>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Judul Berita</label>
                             <input type="text" class="form-control" id="judul_berita" name="judul">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Status Berita</label>
-                            <select class="custom-select" id="status_berita" name="status_berita">
-                                <option selected>Status</option>
-                                <option value="Rekomendasi">Rekomendasi</option>
-                                <option value="Biasa">Biasa</option>
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Thumbnail Berita</label><br>
