@@ -26,19 +26,20 @@
         $id_berita = $_POST['id_berita'];
         $judul = $_POST['judul']; 
         $deskripsi = $_POST['deskripsi_berita'];
-        $status_berita = $_POST['status_berita'];
-
+        
         if(isset($_FILES['namafile'])){
             $ext_file = pathinfo($_FILES['namafile']['name'], PATHINFO_EXTENSION);
-            if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-                $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
-
-                if(is_file('../img/berita_image/'.$nama_file_baru)) unlink('../img/berita_image/'.$nama_file_baru);
-
-                $tmp_file = $_FILES['namafile']['tmp_name'];   
-
+            $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
+            
+            if(is_file('../img/berita_image/'.$nama_file_baru)) unlink('../img/berita_image/'.$nama_file_baru);
+            
+            $tmp_file = $_FILES['namafile']['tmp_name'];   
+            $file_size = $_FILES['namafile']['size'];
+            $maximumFileSize = 2097152;
+            
+            if($file_size <= $maximumFileSize){
                 if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-                    $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi', status_berita = '$status_berita', thumbnail_berita = '$nama_file_baru' WHERE id_berita = '$id_berita'";
+                    $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi', thumbnail_berita = '$nama_file_baru' WHERE id_berita = '$id_berita'";
                     mysqli_query($koneksi, $sql);
                     move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
                     header('Location: table_berita.php');
@@ -46,7 +47,7 @@
             }
         }
 
-        $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi', status_berita = '$status_berita' WHERE id_berita = '$id_berita'";
+        $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi' WHERE id_berita = '$id_berita'";
         mysqli_query($koneksi, $sql);
         header('Location: table_berita.php');
     }
@@ -126,7 +127,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="table_berita.php">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Berita</span>
                 </a>
@@ -221,21 +222,10 @@
                     </h1>
                     <hr>
                     <form action="edit_berita_page.php" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">ID Berita</label>
-                            <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= $row['id_berita'] ?>" readonly>
-                        </div>
+                            <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= $row['id_berita'] ?>" readonly hidden>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Judul Berita</label>
                             <input type="text" class="form-control" id="judul_berita" name="judul" value="<?= $row['judul'] ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Status Berita</label>
-                            <select class="custom-select" id="status_berita" name="status_berita">
-                                <option selected>Status</option>
-                                <option value="Rekomendasi" <?= ((IfOptionSelected("REKOMENDASI", $row['status_berita'])) ? 'selected="selected"' : "")?>>Rekomendasi</option>
-                                <option value="Biasa" <?= ((IfOptionSelected("BIASA", $row['status_berita'])) ? 'selected="selected"' : "")?>>Biasa</option>
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Thumbnail Berita</label><br>
