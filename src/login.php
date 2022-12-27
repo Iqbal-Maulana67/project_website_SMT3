@@ -10,7 +10,7 @@ if(isset($_POST['submit'])){
 
     if(!empty(trim($username)) && !empty($pass)){
 
-        $query = "SELECT * FROM admin WHERE username = '$username'";
+        $query = "SELECT * FROM admin WHERE username = '$username' AND password = '$pass'";
         $result = mysqli_query($koneksi, $query);
         $num = mysqli_num_rows($result);
 
@@ -18,7 +18,7 @@ if(isset($_POST['submit'])){
             $userNameVal = $row['username'];
 			$passVal = $row['password'];
             $userVal = $row['nama_admin'];
-            // $level = $row['level'];
+            $level = $row['level'];
         }
 
         if($num != 0){
