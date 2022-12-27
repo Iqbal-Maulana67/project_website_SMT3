@@ -44,6 +44,8 @@
                     move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
                     header('Location: table_berita.php');
                 }
+            }else{
+                echo "<script type='text/javascript'>alert('Ukuran file terlalu besar!');</script>";
             }
         }
 
