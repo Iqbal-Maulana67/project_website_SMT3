@@ -26,16 +26,18 @@
         $id_berita = $_POST['id_berita'];
         $judul = $_POST['judul']; 
         $deskripsi = $_POST['deskripsi_berita'];
-
+        
         if(isset($_FILES['namafile'])){
             $ext_file = pathinfo($_FILES['namafile']['name'], PATHINFO_EXTENSION);
-            if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-                $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
-
-                if(is_file('../img/berita_image/'.$nama_file_baru)) unlink('../img/berita_image/'.$nama_file_baru);
-
-                $tmp_file = $_FILES['namafile']['tmp_name'];   
-
+            $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
+            
+            if(is_file('../img/berita_image/'.$nama_file_baru)) unlink('../img/berita_image/'.$nama_file_baru);
+            
+            $tmp_file = $_FILES['namafile']['tmp_name'];   
+            $file_size = $_FILES['namafile']['size'];
+            $maximumFileSize = 2097152;
+            
+            if($file_size <= $maximumFileSize){
                 if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
                     $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi', thumbnail_berita = '$nama_file_baru' WHERE id_berita = '$id_berita'";
                     mysqli_query($koneksi, $sql);
@@ -125,7 +127,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="table_berita.php">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Berita</span>
                 </a>

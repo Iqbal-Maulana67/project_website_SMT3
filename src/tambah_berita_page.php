@@ -20,16 +20,21 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
 
         if(is_file('../img/berita_image/'.$nama_file_baru)) unlink('../img/berita_image/'.$nama_file_baru);
 
-        $tmp_file = $_FILES['namafile']['tmp_name'];   
-        echo $ext_file;
-
-        if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-            $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, deskripsi)
-            VALUES ('$id_berita', '$judul', '$nama_file_baru', '$deskripsi')";
-            mysqli_query($koneksi, $sql);       
-
-            move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
-            header('Location: table_berita.php');
+        $tmp_file = $_FILES['namafile']['tmp_name'];
+        $file_size = $_FILES['namafile']['size'];
+        $maximumFileSize = 2097152;
+        
+        if($file_size <= $maximumFileSize){
+            if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
+                $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, deskripsi)
+                VALUES ('$id_berita', '$judul', '$nama_file_baru', '$deskripsi')";
+                mysqli_query($koneksi, $sql);       
+    
+                move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
+                header('Location: table_berita.php?');
+            }
+        }else{
+            echo "<script type='text/javascript'>alert('Ukuran file terlalu besar!');</script>";
         }
     }
 
@@ -63,9 +68,6 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
             $newIDs = "BRT$date$month$year"."001";
             return $newIDs;
         }
-
-        
-
     }
 
 ?>
@@ -135,7 +137,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="table_berita.php">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Berita</span>
                 </a>
