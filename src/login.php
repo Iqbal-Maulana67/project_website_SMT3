@@ -15,28 +15,28 @@ if(isset($_POST['submit'])){
         $num = mysqli_num_rows($result);
 
         while($row = mysqli_fetch_array($result)){
-            $userName = $row['username'];
+            $userNameVal = $row['username'];
 			$passVal = $row['password'];
             $userVal = $row['nama_admin'];
             // $level = $row['level'];
         }
 
         if($num != 0){
-            if($userName == $username && $passVal == $pass){
+            if($userNameVal == $username && $passVal == $pass){
 				$_SESSION['username'] = $userName;
 				$_SESSION['nama_admin'] = $userVal;
 				header('Location: index.php');
             }else{
-                $error = 'user atau password salah';
-                header('Location: login.php');
+                $error = 'User atau password salah';
+				echo "<script type='text/javascript'>alert('$error');</script>";
             }
         }else{
             $error = 'User tidak ditemukan!';
-            header('Location: login.php');
+            echo "<script type='text/javascript'>alert('$error');</script>";
         }
     }else{
-        $error = 'Data tidak boleh kosong!';
-        echo $error;
+        $error = 'Isi username dan password terlebih dahulu!';
+		echo "<script type='text/javascript'>alert('$error');</script>";
     }	
 }
 ?>
@@ -48,7 +48,7 @@ if(isset($_POST['submit'])){
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>My Login Page</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="css/mylogin.css">
+	<link rel="stylesheet" type="text/css" href="../css/mylogin.css">
 </head>
 
 <body class="my-login-page">
@@ -59,25 +59,17 @@ if(isset($_POST['submit'])){
 				<div class="card-wrapper p-3">
 					<div class="card fat">
 						<div class="card-body">
-							<img src="img/logo-sekolah.png" class="card-img-top" alt="...">
+							<img src="../img/logo-sekolah.png" class="card-img-top" alt="...">
 							<h4 class="card-title">Login</h4>
 							<form method="POST" class="my-login-validation" novalidate="" action="login.php">
 								<div class="form-group">
 									<label for="email">Username</label>
 									<input id="email" type="email" class="form-control" name="txt_username" value="" required autofocus>
-									<div class="invalid-feedback">
-										Email is invalid
-									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="password">Password
-										
-									</label>
+									<label for="password">Password</label>
 									<input id="password" type="password" class="form-control" name="txt_pass" required data-eye>
-								    <div class="invalid-feedback">
-								    	Password is required
-							    	</div>
 								</div>
 								<div class="form-group m-0">
 									<button type="submit" name="submit" class="btn btn-success btn-block">
