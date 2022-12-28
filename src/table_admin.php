@@ -34,7 +34,7 @@ function insertDataAdmin()
     $username = $_POST['username'];
     $password = $_POST['password'];
     $nama_admin = $_POST['nama_admin'];
-    $level = 0;
+    $level = $_POST['level'];
   
     $query = "INSERT INTO admin VALUES(
         '" . $username . "',
@@ -62,7 +62,7 @@ function editDataAdmin()
     $username = $_POST['username'];
     $password = $_POST['password'];
     $nama_admin = $_POST['nama_admin'];
-    $level = 0;
+    $level = $_POST['level'];
    
     $query = "UPDATE admin SET password='$password', nama_admin='$nama_admin', level='$level' WHERE username='$username'"; 
 
@@ -70,6 +70,14 @@ function editDataAdmin()
         $koneksi,
         $query
     );
+}
+
+function showLevelDesc($level){
+    if($level == 0){
+        return "Admin";
+    }else if($level == 1){
+        return "Owner";
+    }
 }
 function IfOptionSelected($data, $selectedData)
 {
@@ -306,16 +314,25 @@ function IfOptionSelected($data, $selectedData)
                                             <form action="table_admin.php" method="POST">
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Username</label>
-                                                    <input type="text" class="form-control" id="username" name="username">
+                                                    <input type="text" class="form-control" id="username" name="username" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Password</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="password">
+                                                    <input type="text" class="form-control" id="nama_siswa" name="password" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Nama Admin</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin">
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_admin" required>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="col-form-label">Nama Admin</label>
+                                                    <select class="custom-select" id="level" name="level" required>
+                                                        <option selected value="">Level</option>
+                                                        <option value="0">Admin</option>
+                                                        <option value="1">Owner</option>
+                                                    </select>
+                                                </div>
+                                                
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -351,7 +368,7 @@ function IfOptionSelected($data, $selectedData)
                                             <td id="username" class="username">' . $row['username'] . '</td>
                                             <td>' . $row['password'] . '</td>
                                             <td>' . $row['nama_admin'] . '</td>
-                                            <td>' . $row['level'] . '</td>
+                                            <td>' . showLevelDesc($row['level']) . '</td>
                                             <td>
                                             <button class="btn btn-warning fas fa-edit" type="button" id="editButton" onclick="editAdmin(`' . $row['username'] . '`)"></button>
                                             <button class="btn btn-danger fas fa-trash-alt" type="button" id="hapusButton" onclick="deleteAdmin(`' . $row['username'] . '`)"></button>
@@ -398,7 +415,11 @@ function IfOptionSelected($data, $selectedData)
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Level</label>
-                                                    <input type="text" class="form-control" id="level" name="level" value="' . $row['level'] .'">
+                                                    <select class="custom-select" id="level" name="level" required>
+                                                        <option value="">Level</option>
+                                                        <option value="0" '.((IfOptionSelected("0", $row['level'])) ? 'selected="selected"' : "").'>Admin</option>
+                                                        <option value="1" '.((IfOptionSelected("1", $row['level'])) ? 'selected="selected"' : "").'>Owner</option>
+                                                    </select>
                                                 </div>
                                                 
                                         </div>
