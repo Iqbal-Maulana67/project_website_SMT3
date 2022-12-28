@@ -402,15 +402,15 @@ function IfOptionSelected($data, $selectedData)
                                             <form action="table_alumni.php" method="POST">
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">NISN</label>
-                                                    <input type="text" class="form-control" id="nisn" name="nisn">
+                                                    <input type="text" class="form-control" id="nisn" name="nisn" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Nama Siswa Alumni</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Jenis Kelamin</label>
-                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
+                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin" required>
                                                         <option selected>Jenis Kelamin</option>
                                                         <option value="L">Laki-laki</option>
                                                         <option value="P">Perempuan</option>
@@ -426,7 +426,7 @@ function IfOptionSelected($data, $selectedData)
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Tahun Lulusan</label>
-                                                    <input type="text" class="form-control" id="tahun_lulusan" name="tahun_lulusan">
+                                                    <input type="text" class="form-control" id="tahun_lulusan" name="tahun_lulusan" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Status Alumni</label>
@@ -442,7 +442,7 @@ function IfOptionSelected($data, $selectedData)
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Password</label>
-                                                    <input type="text" class="form-control" id="password" name="password">
+                                                    <input type="text" class="form-control" id="password" name="password" required>
                                                 </div>
                                         </div>
                                         <div class="modal-footer">

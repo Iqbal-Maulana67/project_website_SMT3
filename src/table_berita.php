@@ -223,43 +223,6 @@
                                     <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
                                 </a>
                             </div>
-
-                            <!-- Insert modal -->
-                            <div class="modal fade" id="insertDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">View Berita</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h1 class="h4 mb-2 text-gray-800">
-                                            (TITLE)
-                                            </h1>
-                                            <hr>
-                                            <img src="../img/login-background.jpg" alt="" class="berita-img-view">
-                                            <p class="berita-description">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Congue mauris rhoncus aenean vel. Dui id ornare arcu odio. Vulputate mi sit amet mauris commodo quis. At auctor urna nunc id cursus metus aliquam eleifend. Vel facilisis volutpat est velit egestas dui id ornare arcu. Cursus eget nunc scelerisque viverra mauris in aliquam. A pellentesque sit amet porttitor eget dolor morbi non. Nunc mi ipsum faucibus vitae aliquet nec. Scelerisque eleifend donec pretium vulputate sapien. Mauris rhoncus aenean vel elit scelerisque.
-
-                                            Vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Purus semper eget duis at tellus at urna condimentum. Feugiat in fermentum posuere urna nec tincidunt. Ac turpis egestas integer eget. Facilisis magna etiam tempor orci eu lobortis elementum nibh. Tortor dignissim convallis aenean et tortor at. Justo eget magna fermentum iaculis eu non. Sed cras ornare arcu dui. Et tortor at risus viverra adipiscing at in tellus integer. Tortor aliquam nulla facilisi cras fermentum odio eu.
-                                            
-                                            Orci nulla pellentesque dignissim enim sit amet venenatis urna. Odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Fringilla ut morbi tincidunt augue interdum velit euismod in. Ut sem viverra aliquet eget. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Nullam eget felis eget nunc lobortis mattis aliquam faucibus. Est pellentesque elit ullamcorper dignissim cras tincidunt. Sem viverra aliquet eget sit amet tellus cras adipiscing enim. Felis donec et odio pellentesque diam. Volutpat sed cras ornare arcu dui vivamus arcu felis. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Accumsan sit amet nulla facilisi morbi tempus iaculis. Vestibulum lorem sed risus ultricies tristique nulla aliquet enim. Aliquam vestibulum morbi blandit cursus risus at ultrices.
-
-                                            Varius quam quisque id diam. Commodo nulla facilisi nullam vehicula ipsum a arcu. Turpis massa sed elementum tempus. Vestibulum morbi blandit cursus risus at. Porta lorem mollis aliquam ut porttitor. Egestas sed sed risus pretium quam. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Tellus integer feugiat scelerisque varius morbi enim nunc. Est sit amet facilisis magna. Maecenas pharetra convallis posuere morbi leo.
-
-                                            Sem et tortor consequat id porta nibh venenatis cras. Auctor augue mauris augue neque gravida in fermentum. Egestas egestas fringilla phasellus faucibus scelerisque. Lacus luctus accumsan tortor posuere ac ut. Eu augue ut lectus arcu bibendum. Mollis nunc sed id semper risus in hendrerit gravida rutrum. Egestas maecenas pharetra convallis posuere morbi. Condimentum lacinia quis vel eros. Quis vel eros donec ac odio. Varius vel pharetra vel turpis nunc eget lorem. Eu sem integer vitae justo eget magna fermentum iaculis eu. Sem nulla pharetra diam sit amet nisl suscipit. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Consectetur lorem donec massa sapien faucibus et molestie. Faucibus interdum posuere lorem ipsum dolor sit amet consectetur.
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Hapus Data Modal -->
                             
 
                             <!-- Table Data -->

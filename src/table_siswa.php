@@ -430,15 +430,15 @@
                                             <form action="table_siswa.php" method="POST">
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">NISN</label>
-                                                    <input type="text" class="form-control" id="nisn" name="nisn">
+                                                    <input type="text" class="form-control" id="nisn" name="nisn" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Nama Siswa</label>
-                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa">
+                                                    <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Jenis Kelamin</label>
-                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin">
+                                                    <select class="custom-select" id="jenis_kelamin" name="jenis_kelamin" required>
                                                         <option selected>Jenis Kelamin</option>
                                                         <option value="L">Laki-laki</option>
                                                         <option value="P">Perempuan</option>
@@ -446,8 +446,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Kelas</label>
-                                                    <select class="custom-select" id="kelas" name="kelas">
-                                                        <option selected>Kelas</option>
+                                                    <select class="custom-select" id="kelas" name="kelas" required>
+                                                        <option value="" selected>Kelas</option>
                                                         <option value="X">X</option>
                                                         <option value="XI">XI</option>
                                                         <option value="XII">XII</option>
@@ -455,8 +455,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Golongan</label>
-                                                    <select class="custom-select" id="golongan" name="golongan">
-                                                        <option selected>Golongan</option>
+                                                    <select class="custom-select" id="golongan" name="golongan" required>
+                                                        <option value=""selected>Golongan</option>
                                                         <option value="A">A</option>
                                                         <option value="B">B</option>
                                                         <option value="C">C</option>
@@ -464,8 +464,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Jurusan</label>
-                                                    <select class="custom-select" id="jurusan" name="jurusan">
-                                                        <option selected>Jurusan</option>
+                                                    <select class="custom-select" id="jurusan" name="jurusan" required>
+                                                        <option value="" selected>Jurusan</option>
                                                         <?php
                                                         fetchDataJurusan();
                                                         ?>
@@ -473,16 +473,16 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label">Nama Orang Tua</label>
-                                                    <input type="text" class="form-control" id="nama_ortu" name="nama_ortu">
+                                                    <input type="text" class="form-control" id="nama_ortu" name="nama_ortu" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Alamat</label>
-                                                    <textarea class="form-control" id="alamat" name="alamat"></textarea>
+                                                    <textarea class="form-control" id="alamat" name="alamat" required></textarea>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Status Alumni</label>
-                                                    <select class="custom-select" id="status" name="status">
-                                                        <option selected>STATUS</option>
+                                                    <label for="recipient-name" class="col-form-label">Status Siswa</label>
+                                                    <select class="custom-select" id="status" name="status" required>
+                                                        <option value="" selected>Status Siswa</option>
                                                         <option value="TIDAK AKTIF">Tidak Aktif</option>
                                                         <option value="AKTIF">Aktif</option>
                                                         <option value="ALUMNI">Alumni</option>
@@ -665,25 +665,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    
-    <!-- Alert Berhasil  -->
-    <div class="alert show">
-         <span class="fas fa-check-circle"></span>
-         <span class="msg">Warning: This is a warning alert!</span>
-         <div class="close-btn">
-            <span class="fas fa-times"></span>
-         </div>
-    </div>
-
-    <!-- Alert Gagal  -->
-    <div class="alert show">
-         <span class="fas fa-times-circle"></span>
-         <span class="msg">Warning: This is a warning alert!</span>
-         <div class="close-btn">
-            <span class="fas fa-times"></span>
-         </div>
-    </div>
-
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

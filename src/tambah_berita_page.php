@@ -235,7 +235,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
                             <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= idBeritaGenerator() ?>" hidden>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Judul Berita</label>
-                            <input type="text" class="form-control" id="judul_berita" name="judul">
+                            <input type="text" class="form-control" id="judul_berita" name="judul" required>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Thumbnail Berita</label><br>
@@ -243,7 +243,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Deskripsi Berita</label>
-                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;"></textarea>
+                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;" required></textarea>
                         </div>
                         <hr>
                         <div class="form-group" >

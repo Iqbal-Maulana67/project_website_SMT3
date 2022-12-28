@@ -61,7 +61,7 @@ if (isset($_POST['submit_import'])) {
                         nama_instansi = '" . $nama_instasi . "', password= '" . $password . "' WHERE nisn = '" . $nisn . "'";
                         mysqli_query($koneksi, $query);
                         unlink($path);
-                        header("Location: ../table_alumi.php");
+                        header("Location: ../table_alumni.php");
                     } else {
                         echo 'Error Code: ' . $e->getCode();
                         echo 'Error Message: ' . $e->getMessage();

@@ -227,7 +227,7 @@
                             <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= $row['id_berita'] ?>" readonly hidden>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Judul Berita</label>
-                            <input type="text" class="form-control" id="judul_berita" name="judul" value="<?= $row['judul'] ?>">
+                            <input type="text" class="form-control" id="judul_berita" name="judul" value="<?= $row['judul'] ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Thumbnail Berita</label><br>
@@ -235,7 +235,7 @@
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Deskripsi Berita</label>
-                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;"><?= $row['deskripsi'] ?></textarea>
+                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;" required><?= $row['deskripsi'] ?></textarea>
                         </div>
                         <hr>
                         <div class="form-group" >
