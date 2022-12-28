@@ -10,21 +10,22 @@ if(isset($_POST['submit'])){
 
     if(!empty(trim($username)) && !empty($pass)){
 
-        $query = "SELECT * FROM admin WHERE username = '$username' AND password = '$pass'";
+        $query = "SELECT * FROM admin WHERE username = '$username'";
         $result = mysqli_query($koneksi, $query);
         $num = mysqli_num_rows($result);
 
         while($row = mysqli_fetch_array($result)){
-            $userNameVal = $row['username'];
+            $userName = $row['username'];
 			$passVal = $row['password'];
             $userVal = $row['nama_admin'];
             $level = $row['level'];
         }
 
         if($num != 0){
-            if($userNameVal == $username && $passVal == $pass){
+            if($userName == $username && $passVal == $pass){
 				$_SESSION['username'] = $userName;
-				$_SESSION['nama_admin'] = $userVal;
+				$_SESSION['nama_admin'] = $userVal;	
+				$_SESSION['level_admin'] = $level;
 				header('Location: index.php');
             }else{
                 $error = 'User atau password salah';
