@@ -1,5 +1,6 @@
 <?php
 require('config/koneksi.php');
+require('model/history_logs.php');
 session_start();
 
 if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
@@ -56,6 +57,8 @@ function insertDataAdmin()
         '" . $level . "')";
 
     $sql = mysqli_query($koneksi, $query);
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $username, 'Data Admin');
 }
 
 function deleteDataAdmin($username)
@@ -66,6 +69,9 @@ function deleteDataAdmin($username)
         $koneksi,
         "DELETE FROM admin WHERE username='$username'"
     );
+    
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'HAPUS', $username, 'Data Admin');
 }
 
 function editDataAdmin()
@@ -83,6 +89,9 @@ function editDataAdmin()
         $koneksi,
         $query
     );
+    
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'UBAH', $username, 'Data Admin');
 }
 
 function showLevelDesc($level){

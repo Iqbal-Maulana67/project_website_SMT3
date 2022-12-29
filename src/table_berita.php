@@ -1,5 +1,6 @@
 <?php
     require 'config/koneksi.php';
+    require('model/history_logs.php');
 
     session_start();
 
@@ -43,6 +44,9 @@
         $sql = "DELETE FROM berita WHERE id_berita = '$id_berita'";
 
         mysqli_query($koneksi, $sql);
+        
+        $historyController = new historyLogs();
+        $historyController->insertHistory($_SESSION['username'], 'HAPUS', $id_berita, 'Data Berita');
     }
 
 ?>

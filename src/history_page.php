@@ -191,12 +191,11 @@ require('config/koneksi.php');
                                             <th>Waktu</th>
                                             <th>Aksi</th>
                                             <th>Deskripsi</th>
-                                            <th>View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                        $query = "SELECT * FROM history_logs";
+                                        $query = "SELECT * FROM history_logs ORDER BY timestamp DESC";
                                         $result = mysqli_query($koneksi, $query);
                                         $numrows = mysqli_num_rows($result);
 
@@ -208,41 +207,7 @@ require('config/koneksi.php');
                                             <td>'.$row['timestamp'].'</td>
                                             <td>'.$row['action'].'</td>
                                             <td>'.$row['deskripsi'].'</td>
-                                            <td style="text-align: center;">
-                                                <button class="btn btn-warning fas fa-eye" type="button" id="editButton" onclick="edit(`' . $row['username'] . '`)" ></button>
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="viewModal' . $row['username'] . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Detail Validasi Alumni</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Username</label>
-                                                    <input type="text" class="form-control" id="nisn" name="nisn" value="' . $row['username'] . '">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Tanggal & Waktu</label>
-                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_alumni" value="' . $row['timestamp'] . '">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Aksi</label>
-                                                    <input type="text" class="form-control" id="nama_alumni" name="status_alumni" value="' . $row['action'] . '">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="recipient-name" class="col-form-label">Deskripsi</label>
-                                                    <input type="text" class="form-control" id="nama_alumni" name="nama_instansi" value="' . $row['deskripsi'] . '">
-                                                </div>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                                    
+                                        </tr>       
                                         ';}
                                         ?>
                                     </tbody>
