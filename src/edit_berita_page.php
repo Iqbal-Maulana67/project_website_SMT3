@@ -1,6 +1,17 @@
 <?php
     require 'config/koneksi.php';
     
+    session_start();
+
+    if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
+        header('Location: login.php');
+    }
+
+    if(isset($_POST['submit_logout'])){
+        session_destroy();
+        header("Location: login.php");
+    }
+
     $row = fetchData();
 
     if(isset($_POST['submit_edit'])){
@@ -147,24 +158,28 @@
                     </div>
                 </div>
             </li>
-            <hr class="sidebar-divider">
+            <?php
+                if($_SESSION['level_admin'] == "1"){
+                    echo '<hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Owner
-            </div>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
-                    <i class="fas fa-fw fa-crown"></i>
-                    <span>Halaman Owner</span>
-                </a>
-                <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
-                        <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                    <div class="sidebar-heading">
+                        Owner
                     </div>
-                </div>
-            </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
+                            <i class="fas fa-fw fa-crown"></i>
+                            <span>Halaman Owner</span>
+                        </a>
+                        <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
+                                <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                            </div>
+                        </div>
+                    </li>';
+                }
+            ?>
         </ul>
         <!-- End of Sidebar -->
 
@@ -184,25 +199,19 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                    <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$_SESSION['nama_admin']?></span>
+                                <img class="img-profile rounded-circle"
+                                    src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -227,7 +236,7 @@
                             <input type="text" class="form-control" id="id_berita" name="id_berita" value="<?= $row['id_berita'] ?>" readonly hidden>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Judul Berita</label>
-                            <input type="text" class="form-control" id="judul_berita" name="judul" value="<?= $row['judul'] ?>">
+                            <input type="text" class="form-control" id="judul_berita" name="judul" value="<?= $row['judul'] ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Thumbnail Berita</label><br>
@@ -235,7 +244,7 @@
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">Deskripsi Berita</label>
-                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;"><?= $row['deskripsi'] ?></textarea>
+                            <textarea class="form-control" id="alamat" name="deskripsi_berita" style="height: 10rem;" required><?= $row['deskripsi'] ?></textarea>
                         </div>
                         <hr>
                         <div class="form-group" >
@@ -261,20 +270,23 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <form action="index.php" enctype="multipart/form-data" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda yakin keluar dari aplikasi?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-success" type="submit" name="submit_logout">Iya</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

@@ -1,6 +1,17 @@
 <?php
     require 'config/koneksi.php';
 
+    session_start();
+
+    if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
+        header('Location: login.php');
+    }
+    
+    if(isset($_POST['submit_logout'])){
+        session_destroy();
+        header("Location: login.php");
+    }
+
     if(isset($_POST['submit_hapus'])){
         hapusBerita();
     }
@@ -120,24 +131,28 @@
                     </div>
                 </div>
             </li>
-            <hr class="sidebar-divider">
+            <?php
+                if($_SESSION['level_admin'] == "1"){
+                    echo '<hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Owner
-            </div>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
-                    <i class="fas fa-fw fa-crown"></i>
-                    <span>Halaman Owner</span>
-                </a>
-                <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
-                        <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                    <div class="sidebar-heading">
+                        Owner
                     </div>
-                </div>
-            </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
+                            <i class="fas fa-fw fa-crown"></i>
+                            <span>Halaman Owner</span>
+                        </a>
+                        <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
+                                <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                            </div>
+                        </div>
+                    </li>';
+                }
+            ?>
         </ul>
         <!-- End of Sidebar -->
 
@@ -157,25 +172,19 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                    <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php //echo $_SESSION['nama_admin'] ?></span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$_SESSION['nama_admin']?></span>
+                                <img class="img-profile rounded-circle"
+                                    src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -223,43 +232,6 @@
                                     <button class="btn btn-success mb-3 text-end m-1" data-toggle="modal" data-target="#insertDataModal">Tambah data</button>
                                 </a>
                             </div>
-
-                            <!-- Insert modal -->
-                            <div class="modal fade" id="insertDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">View Berita</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h1 class="h4 mb-2 text-gray-800">
-                                            (TITLE)
-                                            </h1>
-                                            <hr>
-                                            <img src="../img/login-background.jpg" alt="" class="berita-img-view">
-                                            <p class="berita-description">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Congue mauris rhoncus aenean vel. Dui id ornare arcu odio. Vulputate mi sit amet mauris commodo quis. At auctor urna nunc id cursus metus aliquam eleifend. Vel facilisis volutpat est velit egestas dui id ornare arcu. Cursus eget nunc scelerisque viverra mauris in aliquam. A pellentesque sit amet porttitor eget dolor morbi non. Nunc mi ipsum faucibus vitae aliquet nec. Scelerisque eleifend donec pretium vulputate sapien. Mauris rhoncus aenean vel elit scelerisque.
-
-                                            Vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Purus semper eget duis at tellus at urna condimentum. Feugiat in fermentum posuere urna nec tincidunt. Ac turpis egestas integer eget. Facilisis magna etiam tempor orci eu lobortis elementum nibh. Tortor dignissim convallis aenean et tortor at. Justo eget magna fermentum iaculis eu non. Sed cras ornare arcu dui. Et tortor at risus viverra adipiscing at in tellus integer. Tortor aliquam nulla facilisi cras fermentum odio eu.
-                                            
-                                            Orci nulla pellentesque dignissim enim sit amet venenatis urna. Odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Fringilla ut morbi tincidunt augue interdum velit euismod in. Ut sem viverra aliquet eget. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Nullam eget felis eget nunc lobortis mattis aliquam faucibus. Est pellentesque elit ullamcorper dignissim cras tincidunt. Sem viverra aliquet eget sit amet tellus cras adipiscing enim. Felis donec et odio pellentesque diam. Volutpat sed cras ornare arcu dui vivamus arcu felis. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Accumsan sit amet nulla facilisi morbi tempus iaculis. Vestibulum lorem sed risus ultricies tristique nulla aliquet enim. Aliquam vestibulum morbi blandit cursus risus at ultrices.
-
-                                            Varius quam quisque id diam. Commodo nulla facilisi nullam vehicula ipsum a arcu. Turpis massa sed elementum tempus. Vestibulum morbi blandit cursus risus at. Porta lorem mollis aliquam ut porttitor. Egestas sed sed risus pretium quam. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Tellus integer feugiat scelerisque varius morbi enim nunc. Est sit amet facilisis magna. Maecenas pharetra convallis posuere morbi leo.
-
-                                            Sem et tortor consequat id porta nibh venenatis cras. Auctor augue mauris augue neque gravida in fermentum. Egestas egestas fringilla phasellus faucibus scelerisque. Lacus luctus accumsan tortor posuere ac ut. Eu augue ut lectus arcu bibendum. Mollis nunc sed id semper risus in hendrerit gravida rutrum. Egestas maecenas pharetra convallis posuere morbi. Condimentum lacinia quis vel eros. Quis vel eros donec ac odio. Varius vel pharetra vel turpis nunc eget lorem. Eu sem integer vitae justo eget magna fermentum iaculis eu. Sem nulla pharetra diam sit amet nisl suscipit. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Consectetur lorem donec massa sapien faucibus et molestie. Faucibus interdum posuere lorem ipsum dolor sit amet consectetur.
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Hapus Data Modal -->
                             
 
                             <!-- Table Data -->
@@ -267,7 +239,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>id_berita</th>
+                                            <th>ID Berita</th>
                                             <th>Judul</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -356,20 +328,23 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <form action="index.php" enctype="multipart/form-data" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda yakin keluar dari aplikasi?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-success" type="submit" name="submit_logout">Iya</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

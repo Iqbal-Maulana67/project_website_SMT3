@@ -6,6 +6,50 @@
     if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
         header('Location: login.php');
     }
+    
+    if(isset($_POST['submit_logout'])){
+        session_destroy();
+        header("Location: login.php");
+    }
+
+    function getCountedData($args){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        $totalJumlah = 0;
+        if($args == "AKTIF"){
+            $sql = "SELECT COUNT(nisn) FROM siswa_aktif";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $totalJumlah = $row['COUNT(nisn)'];
+        } else if($args == "KULIAH"){
+            $sql = "SELECT COUNT(nisn) FROM siswa_alumni WHERE status_alumni = 'Kuliah'";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $totalJumlah = $row['COUNT(nisn)'];
+        } else if($args == "KERJA"){
+            $sql = "SELECT COUNT(nisn) FROM siswa_alumni WHERE status_alumni = 'Kerja'";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $totalJumlah = $row['COUNT(nisn)'];
+        } else if($args == "VALIDASI"){
+            $sql = "SELECT COUNT(nisn) FROM validasi_status_alumni";
+            $result = mysqli_query($koneksi, $sql);
+            $row = mysqli_fetch_array($result);
+            $totalJumlah = $row['COUNT(nisn)'];
+        }
+        return $totalJumlah;
+    }
+
+    function getDataStatistic($args){
+        $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+        $sql = "";
+        if($args == "KERJA"){
+            $sql = "SELECT tahun_lulusan, COUNT(nisn) FROM siswa_alumni WHERE status_alumni= 'Kerja' GROUP BY tahun_lulusan";
+        }else if($args == "KULIAH"){
+            $sql = "SELECT tahun_lulusan, COUNT(nisn) FROM siswa_alumni WHERE status_alumni='Kuliah' GROUP BY tahun_lulusan";
+        }
+
+        return mysqli_query($koneksi, $sql);
+    }
 ?>
 
 
@@ -93,24 +137,29 @@
                     </div>
                 </div>
             </li>
-            <hr class="sidebar-divider">
+            <?php
+                if($_SESSION['level_admin'] == "1"){
+                    echo '<hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Owner
-            </div>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
-                    <i class="fas fa-fw fa-crown"></i>
-                    <span>Halaman Owner</span>
-                </a>
-                <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
-                        <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                    <div class="sidebar-heading">
+                        Owner
                     </div>
-                </div>
-            </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
+                            <i class="fas fa-fw fa-crown"></i>
+                            <span>Halaman Owner</span>
+                        </a>
+                        <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
+                                <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                            </div>
+                        </div>
+                    </li>';
+                }
+            ?>
+            
         </ul>
         <!-- End of Sidebar -->
 
@@ -174,7 +223,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Siswa Aktif</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= getCountedData("AKTIF") ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -192,7 +241,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Alumni Kuliah</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= getCountedData("KULIAH") ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -210,7 +259,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Alumni Kerja</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= getCountedData("KERJA") ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -228,7 +277,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Antrian Validasi Status Alumni</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">(KOSONG)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= getCountedData("VALIDASI") ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-list fa-2x text-gray-300"></i>
@@ -249,7 +298,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-success">Statistik Siswa dan Alumni</h6>
+                                    <h6 class="m-0 font-weight-bold text-success">Statistik Alumni</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -259,159 +308,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small font-weight-bold">Server Migration <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customer Database <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Payout Details <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Color System -->
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-primary text-white shadow">
-                                        <div class="card-body">
-                                            Primary
-                                            <div class="text-white-50 small">#4e73df</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
-                                        <div class="card-body">
-                                            Success
-                                            <div class="text-white-50 small">#1cc88a</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-info text-white shadow">
-                                        <div class="card-body">
-                                            Info
-                                            <div class="text-white-50 small">#36b9cc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-warning text-white shadow">
-                                        <div class="card-body">
-                                            Warning
-                                            <div class="text-white-50 small">#f6c23e</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-danger text-white shadow">
-                                        <div class="card-body">
-                                            Danger
-                                            <div class="text-white-50 small">#e74a3b</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-secondary text-white shadow">
-                                        <div class="card-body">
-                                            Secondary
-                                            <div class="text-white-50 small">#858796</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-light text-black shadow">
-                                        <div class="card-body">
-                                            Light
-                                            <div class="text-black-50 small">#f8f9fc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-dark text-white shadow">
-                                        <div class="card-body">
-                                            Dark
-                                            <div class="text-white-50 small">#5a5c69</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Illustrations -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="...">
-                                    </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
-                                </div>
-                            </div>
-
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -423,7 +319,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Pendasial SMA Darus Sholah</span>
                     </div>
                 </div>
             </footer>
@@ -445,17 +341,19 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <form action="index.php" enctype="multipart/form-data" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Anda yakin keluar dari aplikasi?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-success" type="submit" name="submit_logout">Iya</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -477,6 +375,140 @@
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-area-dashboard.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
+
+    <?php
+        $sql = "SELECT DISTINCT tahun_lulusan FROM siswa_alumni ORDER BY tahun_lulusan ASC";
+        $result = mysqli_query($koneksi, $sql);
+    ?>
+
+    <script>
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        var ctx = document.getElementById("dashboardChart");
+        var LineChart2 = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [
+                    <?php while ($row = mysqli_fetch_array($result)) {
+                        echo '"' . $row['tahun_lulusan'] . '",';
+                    }
+                    ?>],
+            datasets: [
+            {
+            label: "Total Alumni Bekerja",
+            lineTension: 0.3,
+            backgroundColor: "rgba(78, 115, 223, 0.05)",
+            borderColor: "rgba(78, 115, 223, 1)",
+            pointRadius: 3,
+            pointBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointBorderColor: "rgba(78, 115, 223, 1)",
+            pointHoverRadius: 3,
+            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+            pointHitRadius: 10,
+            pointBorderWidth: 2,
+            data: [
+                <?php 
+                     $result = getDataStatistic("KERJA");
+                     while($row = mysqli_fetch_array($result)){
+                         echo $row['COUNT(nisn)'].',';
+                     }
+                ?>
+                ],
+            },
+            {
+            label: "Total Alumni Kuliah",
+            lineTension: 0.3,
+            backgroundColor: "rgba(39, 186, 9, 0.05)",
+            borderColor: "rgba(39, 186, 9, 1)",
+            pointRadius: 3,
+            pointBackgroundColor: "rgba(39, 186, 9, 1)",
+            pointBorderColor: "rgba(39, 186, 9, 1)",
+            pointHoverRadius: 3,
+            pointHoverBackgroundColor: "rgba(39, 186, 9, 1)",
+            pointHoverBorderColor: "rgba(39, 186, 9, 1)",
+            pointHitRadius: 10,
+            pointBorderWidth: 2,
+            data: [
+                <?php 
+                    $result = getDataStatistic("KULIAH");
+                    while($row = mysqli_fetch_array($result)){
+                        echo $row['COUNT(nisn)'].',';
+                    }
+                ?>
+            ],
+            }
+        ],
+        },
+        options: {
+            maintainAspectRatio: false,
+            layout: {
+            padding: {
+                left: 10,
+                right: 25,
+                top: 25,
+                bottom: 0
+            }
+            },
+            scales: {
+            xAxes: [{
+                time: {
+                unit: 'date'
+                },
+                gridLines: {
+                display: false,
+                drawBorder: false
+                },
+                ticks: {
+                maxTicksLimit: 7
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                maxTicksLimit: 5,
+                padding: 10,
+                // Include a dollar sign in the ticks
+                callback: function(value, index, values) {
+                    return number_format(value);
+                }
+                },
+                gridLines: {
+                color: "rgb(234, 236, 244)",
+                zeroLineColor: "rgb(234, 236, 244)",
+                drawBorder: false,
+                borderDash: [2],
+                zeroLineBorderDash: [2]
+                }
+            }],
+            },
+            legend: {
+            display: false
+            },
+            tooltips: {
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            titleMarginBottom: 10,
+            titleFontColor: '#6e707e',
+            titleFontSize: 14,
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            intersect: false,
+            mode: 'index',
+            caretPadding: 10,
+            callbacks: {
+                label: function(tooltipItem, chart) {
+                var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                return datasetLabel + ": " + tooltipItem.yLabel;
+                }
+            }
+            }
+        }
+        });
+    </script>
 
 </body>
 
