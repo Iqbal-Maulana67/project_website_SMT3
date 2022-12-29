@@ -313,7 +313,7 @@
                 <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->Owne
+            <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
