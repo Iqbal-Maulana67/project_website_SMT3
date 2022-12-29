@@ -6,6 +6,10 @@ if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
     header('Location: login.php');
 }
 
+if($_SESSION['level_admin'] != "1"){
+    header('Location: index.php');
+}
+
 if(isset($_POST['submit_logout'])){
     session_destroy();
     header("Location: login.php");

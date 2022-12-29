@@ -158,24 +158,28 @@
                     </div>
                 </div>
             </li>
-            <hr class="sidebar-divider">
+            <?php
+                if($_SESSION['level_admin'] == "1"){
+                    echo '<hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Owner
-            </div>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
-                    <i class="fas fa-fw fa-crown"></i>
-                    <span>Halaman Owner</span>
-                </a>
-                <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
-                        <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                    <div class="sidebar-heading">
+                        Owner
                     </div>
-                </div>
-            </li>
+        
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdminPages" aria-expanded="true" aria-controls="collapseTables">
+                            <i class="fas fa-fw fa-crown"></i>
+                            <span>Halaman Owner</span>
+                        </a>
+                        <div id="collapseAdminPages" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="table_admin.php">Tabel Admin</a>
+                                <a class="collapse-item" href="history_page.php">History Perubahan</a>
+                            </div>
+                        </div>
+                    </li>';
+                }
+            ?>
         </ul>
         <!-- End of Sidebar -->
 
