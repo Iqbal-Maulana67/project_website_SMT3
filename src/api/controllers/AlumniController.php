@@ -5,23 +5,28 @@
     $alumniController = new AlumniAPIController();
 
     if(isset($_POST['update_status'])){
-        $alumniController->updateStatus();
+        echo $alumniController->updateStatus();
     }
 
     if(isset($_POST['update_password'])){
-        $alumniController->updatePassword();
+        echo $alumniController->updatePassword();
     }
     
     if(isset($_POST['update_profile'])){
-        $alumniController->updateDataDiri();
+        echo $alumniController->updateDataDiri();
     }
 
     if(isset($_POST['submit_registration'])){
-        $alumniController->insertDataRegistration();
+        echo $alumniController->insertDataRegistration();
+    }
+    
+    if(isset($_POST['submit_login'])){
+        $data = $alumniController->loginCheck();
+        echo $data;
     }
 
     if(isset($_GET['nisn'])){
-        $alumniController->getSpesificData();
+        echo $alumniController->getSpesificData();
     }
 
     class AlumniAPIController {
@@ -71,19 +76,30 @@
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
 
-            if($password != $confirm_password){
-                return http_response_code(1000);
-            }
-
             $sql = "SELECT * FROM siswa_aktif WHERE nisn ='$nisn'";
             $result = mysqli_query($koneksi, $sql);
-            $row = $result->fetch_array();
-            if($row['status'] == 'ALUMNI'){
-                $sql = "INSERT INTO siswa_alumni (nisn, nama, jenis_kelamin, nomer_hp, password) VALUES ('$nisn', '$nama_alumni', '$jenis_kelamin', '$nomer_hp', '$password')";
-                $this->alumniAPI->rawQuery($sql);
-
-                $sql = "DELETE FROM siswa_aktif WHERE nisn = '$nisn'";
-                $this->alumniAPI->rawQuery($sql);
+            try{
+                $row = $result->fetch_array();
+                if(isset($row)){
+                    if($row['status'] == 'ALUMNI'){
+                        $sql = "INSERT INTO siswa_alumni (nisn, nama, jenis_kelamin, nomer_hp, password) VALUES ('$nisn', '$nama_alumni', '$jenis_kelamin', '$nomer_hp', '$password')";
+                        $this->alumniAPI->rawQuery($sql);
+    
+                        $sql = "DELETE FROM siswa_aktif WHERE nisn = '$nisn'";
+                        $this->alumniAPI->rawQuery($sql);
+                        
+                        http_response_code(200);
+                        return json_encode(array('code' => 200, 'message' => 'Akun berhasil dibuat, silahkan login!', 'data' => $row));
+                    }else{
+                        http_response_code(400);
+                        return json_encode(array('code' => 400, 'message' => 'Siswa belum berstatus alumni'));
+                    }
+                }else{
+                    http_response_code(401);
+                    return json_encode(array('code' => 401, 'message' => 'NISN tidak ditemukan'));
+                }
+            }catch(Exception $e){
+                return json_encode(array('code' => 401, 'message' => $e->getMessage()));
             }
         }
 
@@ -96,8 +112,13 @@
             $nomer_hp = $_POST['nomer_hp'];
 
             $sql = "UPDATE siswa_alumni SET nama='$nama_alumni', jenis_kelamin='$jenis_kelamin', alamat='$alamat', tahun_lulusan='$tahun_lulus', nomer_hp='$nomer_hp' WHERE nisn='$nisn'";
-
-            $this->alumniAPI->rawQuery($sql);
+            try {
+                $this->alumniAPI->rawQuery($sql);
+                return json_encode(array('code' => 200, 'message' => 'Berhasi!'));
+            } catch (Exception $e) {
+                http_response_code(400);
+                return json_encode(array('code' => 400, 'message' => $e->getMessage()));
+            }
         }
 
         public function updatePassword(){
@@ -113,7 +134,14 @@
                 if($password_baru == $password_baru_confirm){
                     $sql = "UPDATE siswa_alumni SET `password`='$password_baru' WHERE nisn = '$nisn'";
                     $this->alumniAPI->rawQuery($sql);
+                    return json_encode(array('code' => 200, 'message' => 'Password berhasil diganti!'));
+                }else {
+                    http_response_code(401);
+                    return json_encode(array('code' => 401, 'message' => 'Password baru tidak sama dengan konfirmasi!'));
                 }
+            }else {
+                http_response_code(400);
+                return json_encode(array('code' => 400, 'message' => 'Password lama tidak sama!'));
             }
         }
 
@@ -142,6 +170,9 @@
                         $this->alumniAPI->rawQuery($sql);
                         move_uploaded_file($tmp_file, '../../../img/validasi_status_images/'.$nama_file_baru);
                     }
+                    return json_encode(array('code' => 200, 'message' => 'Berhasil memperbarui permintaan validasi, silahkan ditunggu!'));
+                }else{
+                    return json_encode(array('code' => 400, 'message' => 'Sertakan foto pendukung validasi!'));
                 }    
             }else{
                 if(isset($_FILES['img_pendukung'])){
@@ -157,8 +188,28 @@
                         $this->alumniAPI->rawQuery($sql);
                         move_uploaded_file($tmp_file, '../../../img/validasi_status_images/'.$nama_file_baru);
                     }
+                    return json_encode(array('code' => 200, 'message' => 'Berhasil melakukan permintaan validasi, silahkan ditunggu!'));
+                }else{
+                    return json_encode(array('code' => 400, 'message' => 'Sertakan foto pendukung validasi!'));
                 }
             }
             
+        }
+
+        public function loginCheck(){
+            $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
+
+            $nisn = $_POST['nisn'];
+            $password = $_POST['password'];
+
+            $sql = "SELECT * FROM siswa_alumni WHERE nisn='$nisn' AND password='$password'";
+            $result = mysqli_query($koneksi, $sql);
+            $row = $result->fetch_assoc();
+            if(isset($row)){
+                return json_encode(array('code' => 200, 'message' => 'Akun ditemukan, Login berhasil!', 'data' => $row));
+            }else{
+                http_response_code(400);
+                return json_encode(array('code' => 400, 'message' => 'NISN/Password salah atau tidak ditemukan!'));
+            }
         }
     }
