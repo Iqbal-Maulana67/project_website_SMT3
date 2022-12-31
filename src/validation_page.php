@@ -1,5 +1,6 @@
 <?php
     require 'config/koneksi.php';
+    require('model/history_logs.php');
 
     session_start();
 
@@ -14,7 +15,9 @@
 
     if(isset($_POST['submit_accept'])){
         acceptedForm();
-    }else if(isset($_POST['submit_denied'])){
+    }
+    
+    if(isset($_POST['submit_denied'])){
         deniedForm();
     }
 
@@ -48,6 +51,10 @@
 
         $sql = "DELETE FROM validasi_status_alumni WHERE nisn = '$nisn'";
         mysqli_query($koneksi, $sql);
+
+        $historyController = new historyLogs();
+        $historyController->insertHistory($_SESSION['username'], 'TERIMA PERMINTAAN', $nisn, 'Antrian Validasi Alumni');
+        
     }
 
     function deniedForm(){
@@ -55,7 +62,7 @@
 
         $nisn = $_POST['nisn'];
         
-        $sql = "SELECT img_pendukung WHERE nisn = '$nisn'";
+        $sql = "SELECT img_pendukung FROM validasi_status_alumni WHERE nisn = '$nisn'";
         $result = mysqli_query($koneksi, $sql);
         $row = $result->fetch_array();
         
@@ -63,6 +70,9 @@
         
         $sql = "DELETE FROM validasi_status_alumni WHERE nisn = '$nisn'";
         mysqli_query($koneksi, $sql);
+
+        $historyController = new historyLogs();
+        $historyController->insertHistory($_SESSION['username'], 'TOLAK PERMINTAAN', $nisn, 'Antrian Validasi Alumni');
     }   
 
 ?>
@@ -318,8 +328,8 @@
                                                                 </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-danger" nama="submit_denied">Tolak Validasi</button>
-                                                            <button type="submit" class="btn btn-success" name="submit_accept">Terima Validasi</button>
+                                                        <button type="submit" class="btn btn-danger" name="submit_denied">Tolak Validasi</button>
+                                                        <button type="button" class="btn btn-success" name="submit_accept">Terima Validasi</button>
                                                         </div>
                                                         </form>
                                                     </div>

@@ -3,7 +3,8 @@
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
 
     require 'config/koneksi.php';
-    
+    require('model/history_logs.php');
+
     session_start();
 
     if(!isset($_SESSION['username']) || !isset($_SESSION['nama_admin'])){
@@ -43,6 +44,8 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
     
                 move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
                 header('Location: table_berita.php?');
+                $historyController = new historyLogs();
+                $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $id_berita, 'Data Berita');
             }
         }else{
             echo "<script type='text/javascript'>alert('Ukuran file terlalu besar!');</script>";

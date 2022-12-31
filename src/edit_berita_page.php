@@ -1,5 +1,6 @@
 <?php
     require 'config/koneksi.php';
+    require('model/history_logs.php');
     
     session_start();
 
@@ -54,6 +55,9 @@
                     mysqli_query($koneksi, $sql);
                     move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
                     header('Location: table_berita.php');
+
+                    $historyController = new historyLogs();
+                    $historyController->insertHistory($_SESSION['username'], 'UBAH', $id_berita, 'Data Berita');
                 }
             }else{
                 echo "<script type='text/javascript'>alert('Ukuran file terlalu besar!');</script>";
@@ -63,6 +67,9 @@
         $sql = "UPDATE berita SET judul = '$judul', deskripsi = '$deskripsi' WHERE id_berita = '$id_berita'";
         mysqli_query($koneksi, $sql);
         header('Location: table_berita.php');
+        
+        $historyController = new historyLogs();
+        $historyController->insertHistory($_SESSION['username'], 'UBAH', $id_berita, 'Data Berita');
     }
 
     function IfOptionSelected($data, $selectedData)

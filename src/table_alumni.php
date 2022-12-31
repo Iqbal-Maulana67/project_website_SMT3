@@ -1,5 +1,6 @@
 <?php
 require('config/koneksi.php');
+require('model/history_logs.php');
 
 session_start();
 
@@ -78,6 +79,9 @@ function insertDataAlumni()
         '" . $password . "')";
 
     $sql = mysqli_query($koneksi, $query);
+
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $nisn, 'Data Alumni');
 }
 
 function deleteDataAlumni($nisn)
@@ -89,6 +93,8 @@ function deleteDataAlumni($nisn)
         $koneksi,
         "DELETE FROM siswa_alumni WHERE nisn='$nisn'"
     );
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'HAPUS', $nisn, 'Data Alumni');
 }
 
 function editDataAlumni()
@@ -109,6 +115,9 @@ function editDataAlumni()
         $koneksi,
         "UPDATE siswa_alumni SET nama='$nama', jenis_kelamin='$jenis_kelamin', nomer_hp= '$no_hp', alamat='$alamat', tahun_lulusan='$tahun_lulusan', status_alumni='$status_alumni', nama_instansi='$nama_instansi', password='$password' WHERE nisn = '$nisn'"
     );
+    
+    $historyController = new historyLogs();
+    $historyController->insertHistory($_SESSION['username'], 'UBAH', $nisn, 'Data Alumni');
 }
 
 function IfOptionSelected($data, $selectedData)

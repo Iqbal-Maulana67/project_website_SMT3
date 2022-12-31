@@ -89,11 +89,12 @@
 
         mysqli_query($koneksi, $query);
 
-        $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $nisn, 'Data Alumni');
+        $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $nisn, 'Data Siswa');
     }
 
     function EditDataSiswa()
     {
+        $historyController = new historyLogs();
         $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
 
         $nisn = $_POST['nisn'];
@@ -110,16 +111,20 @@
             $koneksi,
             "UPDATE siswa_aktif SET nama_siswa='$nama', jenis_kelamin='$jenis_kelamin', kelas= '$kelas', golongan='$golongan', id_jurusan='" . $jurusan['id_jurusan'] . "', nama_ortu='$nama_ortu', alamat='$alamat', status='$status_siswa' WHERE nisn = '$nisn'"
         );
+        
+        $historyController->insertHistory($_SESSION['username'], 'UBAH', $nisn, 'Data Siswa');
     }
 
     function deleteDataSiswa($nisn)
     {
+        $historyController = new historyLogs();
         $koneksi = mysqli_connect('localhost', 'root', '', 'db_sma_darus_sholah');
 
         $sql = mysqli_query(
             $koneksi,
             "DELETE FROM siswa_aktif WHERE nisn='$nisn'"
         );
+        $historyController->insertHistory($_SESSION['username'], 'HAPUS', $nisn, 'Data Siswa');
     }
 
     function fetchDataJurusan()
