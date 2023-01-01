@@ -169,9 +169,10 @@
                         $sql = "UPDATE validasi_status_alumni SET status_alumni = '$status_alumni', nama_instansi = '$nama_instansi', img_pendukung = '$nama_file_baru'";
                         $this->alumniAPI->rawQuery($sql);
                         move_uploaded_file($tmp_file, '../../../img/validasi_status_images/'.$nama_file_baru);
+                        return json_encode(array('code' => 200, 'message' => 'Berhasil memperbarui permintaan validasi, silahkan ditunggu!'));
                     }
-                    return json_encode(array('code' => 200, 'message' => 'Berhasil memperbarui permintaan validasi, silahkan ditunggu!'));
                 }else{
+                    http_response_code(400);
                     return json_encode(array('code' => 400, 'message' => 'Sertakan foto pendukung validasi!'));
                 }    
             }else{
@@ -187,9 +188,10 @@
                         $sql = "INSERT INTO validasi_status_alumni VALUES ('$nisn', '$status_alumni', '$nama_instansi', '$nama_file_baru')";
                         $this->alumniAPI->rawQuery($sql);
                         move_uploaded_file($tmp_file, '../../../img/validasi_status_images/'.$nama_file_baru);
+                        return json_encode(array('code' => 200, 'message' => 'Berhasil melakukan permintaan validasi, silahkan ditunggu!'));
                     }
-                    return json_encode(array('code' => 200, 'message' => 'Berhasil melakukan permintaan validasi, silahkan ditunggu!'));
                 }else{
+                    http_response_code(400);
                     return json_encode(array('code' => 400, 'message' => 'Sertakan foto pendukung validasi!'));
                 }
             }
