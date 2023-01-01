@@ -245,6 +245,7 @@
                                         <tr>
                                             <th>ID Berita</th>
                                             <th>Judul</th>
+                                            <th>Tanggal Berita</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -258,6 +259,7 @@
                                             <tr>
                                                 <td>'. $row['id_berita'] .'</td>
                                                 <td>'. $row['judul'] .'</td>
+                                                <td>'.$row['tanggal_berita'].'</td>
                                                 <td style="text-align: center;">
                                                     <button class="btn btn-warning fas fa-sm fa-eye" type="button" id="editButton" onclick="viewModal(`'.$row['id_berita'].'`)"></button>
                                                     <a href="edit_berita_page.php?id_berita='.$row['id_berita'].'"><button class="btn btn-warning fas fa-xs fa-edit" type="button" id="editButton"></button></a>

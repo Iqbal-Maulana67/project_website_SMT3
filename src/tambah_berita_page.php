@@ -26,6 +26,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
         $id_berita = $_POST['id_berita'];
         $judul = $_POST['judul']; 
         $deskripsi = $_POST['deskripsi_berita'];
+        $date = date("Y-m-d");
         
         $ext_file = pathinfo($_FILES['namafile']['name'], PATHINFO_EXTENSION);
         $nama_file_baru = 'image_berita_'.$id_berita.'.'.$ext_file;
@@ -38,12 +39,13 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Counts;
         
         if($file_size <= $maximumFileSize){
             if($ext_file == "jpg" || $ext_file == "jpeg" || $ext_file == "png"){
-                $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, deskripsi)
-                VALUES ('$id_berita', '$judul', '$nama_file_baru', '$deskripsi')";
+                $sql = "INSERT INTO berita (id_berita, judul, thumbnail_berita, tanggal_berita, deskripsi)
+                VALUES ('$id_berita', '$judul', '$nama_file_baru', '$date', '$deskripsi')";
+                echo $sql;
                 mysqli_query($koneksi, $sql);       
     
                 move_uploaded_file($tmp_file, '../img/berita_image/'.$nama_file_baru);
-                header('Location: table_berita.php?');
+                // header('Location: table_berita.php?');
                 $historyController = new historyLogs();
                 $historyController->insertHistory($_SESSION['username'], 'TAMBAH', $id_berita, 'Data Berita');
             }
