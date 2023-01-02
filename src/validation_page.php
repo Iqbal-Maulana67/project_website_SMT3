@@ -329,7 +329,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <button type="submit" class="btn btn-danger" name="submit_denied">Tolak Validasi</button>
-                                                        <button type="button" class="btn btn-success" name="submit_accept">Terima Validasi</button>
+                                                        <button type="submit" class="btn btn-success" name="submit_accept">Terima Validasi</button>
                                                         </div>
                                                         </form>
                                                     </div>
